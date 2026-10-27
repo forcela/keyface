@@ -1,0 +1,110 @@
+@switch (studio.theme()) {
+  @case ('minimal') {
+    <ss-panel-section title="Minimal">
+      <div class="grid grid-cols-2 items-start gap-3">
+        <ss-segmented-control
+          label="Fond"
+          [options]="backgrounds"
+          [value]="minimal().background"
+          (valueChange)="studio.patch('minimal', { background: $event })"
+        />
+        @if (minimal().background === 'halo') {
+          <ss-color-field
+            label="Couleur du halo"
+            [value]="minimal().haloColor"
+            (valueChange)="studio.patch('minimal', { haloColor: $event })"
+          />
+        }
+      </div>
+      <ss-text-field
+        label="Texte si l'heure est masquée"
+        [maxLength]="12"
+        [value]="minimal().label"
+        (valueChange)="studio.patch('minimal', { label: $event })"
+      />
+    </ss-panel-section>
+  }
+  @case ('landscape') {
+    <ss-panel-section title="Paysage">
+      <ss-segmented-control
+        label="Ambiance"
+        [options]="ambiances"
+        [value]="landscape().ambiance"
+        (valueChange)="studio.patch('landscape', { ambiance: $event })"
+      />
+      <ss-text-field
+        label="Texte si l'heure est masquée"
+        [maxLength]="12"
+        [value]="landscape().label"
+        (valueChange)="studio.patch('landscape', { label: $event })"
+      />
+    </ss-panel-section>
+  }
+  @case ('genz') {
+    <ss-panel-section title="Gen Z">
+      <ss-segmented-control
+        label="Perso"
+        [wrap]="true"
+        [options]="mascots"
+        [value]="genz().mascot"
+        (valueChange)="studio.patch('genz', { mascot: $event })"
+      />
+      <ss-segmented-control
+        label="Couleurs"
+        [options]="palettes"
+        [value]="genz().palette"
+        (valueChange)="studio.patch('genz', { palette: $event })"
+      />
+      <ss-text-field
+        label="Bulle"
+        [maxLength]="10"
+        [value]="genz().bubble"
+        (valueChange)="studio.patch('genz', { bubble: $event })"
+      />
+      <div class="grid gap-1.5">
+        <span class="flex justify-between text-[13px] font-medium">
+          Ton GIF <span class="font-normal text-muted">{{ imageInfo() }}</span>
+        </span>
+        <div class="flex flex-wrap items-center gap-2">
+          <ss-file-button
+            label="Choisir un GIF…"
+            accept="image/gif,image/webp,image/png,image/jpeg"
+            (picked)="pickImage($event)"
+          />
+          @if (genz().image) {
+            <ss-button variant="ghost" [small]="true" (pressed)="clearImage()">Revenir au perso</ss-button>
+          }
+        </div>
+        @if (imageError()) {
+          <p class="m-0 text-xs text-accent" role="alert">{{ imageError() }}</p>
+        }
+        <p class="m-0 text-xs text-muted">
+          Un GIF, un mème, ce que tu veux. Il est recadré en carré et remplace le perso.
+        </p>
+      </div>
+    </ss-panel-section>
+  }
+  @case ('lofi') {
+    <ss-panel-section title="Lo-fi">
+      <ss-text-field
+        label="Titre qui défile"
+        [maxLength]="40"
+        [value]="lofi().title"
+        (valueChange)="studio.patch('lofi', { title: $event })"
+      />
+      <div class="grid grid-cols-2 items-start gap-3">
+        <ss-text-field
+          label="Sous-titre"
+          [maxLength]="22"
+          [value]="lofi().subtitle"
+          (valueChange)="studio.patch('lofi', { subtitle: $event })"
+        />
+        <ss-color-field
+          label="Étiquette"
+          [value]="lofi().labelColor"
+          (valueChange)="studio.patch('lofi', { labelColor: $event })"
+        />
+      </div>
+    </ss-panel-section>
+  }
+}

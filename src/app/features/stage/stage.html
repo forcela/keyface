@@ -1,0 +1,44 @@
+<section
+  class="sticky top-4 grid justify-items-center gap-[22px] rounded-[22px] border border-line bg-[radial-gradient(120%_90%_at_30%_0%,var(--stage-from)_0%,var(--stage-to)_70%)] px-6 pt-10 pb-[18px] max-[900px]:static"
+  aria-label="Aperçu"
+>
+  <div
+    class="flex max-w-full items-stretch gap-3.5 rounded-[20px] bg-[linear-gradient(165deg,#2c2d31,#1d1e21_60%)] p-[18px] shadow-[0_30px_50px_-30px_rgb(0_0_0/0.55)]"
+  >
+    <div class="grid grid-cols-[repeat(3,52px)] grid-rows-[56px_repeat(3,52px)] gap-1.5 max-[560px]:hidden" aria-hidden="true">
+      @for (cap of keyCaps.slice(0, 2); track $index) {
+        <div class="rounded-[7px] bg-[linear-gradient(180deg,#a9abb1_0_78%,#8b8d93_100%)] px-[7px] py-[5px] text-[10px] font-medium text-[#2d2e33] shadow-[0_2px_0_rgb(0_0_0/0.35)]">
+          {{ cap.legend[0] }}
+        </div>
+      }
+      <div
+        class="size-12 self-center justify-self-center rounded-full bg-[repeating-conic-gradient(#8f9096_0_4deg,#6c6d73_4deg_8deg)] shadow-[inset_0_0_0_4px_#7a7b81,0_6px_10px_rgb(0_0_0/0.45)]"
+      ></div>
+      @for (cap of keyCaps.slice(2); track $index) {
+        <div class="grid content-start rounded-[7px] bg-[linear-gradient(180deg,#ecebe7_0_78%,#c9c8c3_100%)] px-[7px] py-[5px] text-[10px] leading-tight font-medium text-[#4a4a4f] shadow-[0_2px_0_rgb(0_0_0/0.35)]">
+          @for (line of cap.legend; track $index) {
+            <span>{{ line }}</span>
+          }
+        </div>
+      }
+    </div>
+    <div class="self-center rounded-xl bg-[#050506] p-[9px] shadow-[inset_0_0_0_1px_rgb(255_255_255/0.07)]">
+      <ss-screen-preview [showPixels]="showPixels()" />
+    </div>
+  </div>
+
+  <div class="flex w-full flex-wrap items-center justify-between gap-3 text-xs text-muted tabular-nums">
+    <span>Boucle de <b class="font-semibold text-fg">{{ loopLabel() }}</b></span>
+    <label class="flex cursor-pointer items-center gap-3 font-medium">
+      Voir les pixels
+      <input type="checkbox" class="ss-switch" [checked]="showPixels()" (change)="showPixels.set(!showPixels())" />
+    </label>
+  </div>
+
+  @if (editing()) {
+    <p class="m-0 max-w-[52ch] text-center text-xs text-muted">
+      Glisse un bloc pour le déplacer · tire le coin blanc pour la taille · flèches pour ajuster au pixel ·
+      Suppr pour effacer · Ctrl + D pour dupliquer
+    </p>
+  }
+</section>

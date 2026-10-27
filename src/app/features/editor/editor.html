@@ -1,0 +1,38 @@
+<ss-panel-section title="Partir d'un modèle">
+  <div class="flex flex-wrap gap-2">
+    @for (template of templates; track template.id) {
+      <ss-button variant="ghost" [small]="true" (pressed)="applyTemplate(template.id, template.label)">
+        {{ template.label }}
+      </ss-button>
+    }
+  </div>
+  @if (editor.beforeTemplate()) {
+    <p class="m-0 text-xs text-muted" role="status">
+      {{ templateNotice() }}
+      <button type="button" class="cursor-pointer underline underline-offset-[3px]" (click)="undoTemplate()">
+        Annuler
+      </button>
+    </p>
+  }
+</ss-panel-section>
+
+<ss-panel-section title="Calques">
+  <div class="flex flex-wrap gap-1.5">
+    @for (item of addable; track item.type) {
+      <ss-button variant="ghost" [small]="true" (pressed)="editor.add(item.type)">+ {{ item.label }}</ss-button>
+    }
+  </div>
+  <ss-layer-list />
+</ss-panel-section>
+
+<ss-panel-section [title]="propsTitle()">
+  <ss-layer-properties />
+</ss-panel-section>
+
+<ss-panel-section title="Ton style">
+  <div class="flex flex-wrap gap-2">
+    <ss-button variant="ghost" [small]="true" (pressed)="saveStyle()">Enregistrer (.json)</ss-button>
+    <ss-file-button label="Ouvrir un style…" accept="application/json,.json" (picked)="openStyle($event)" />
+  </div>
+  <p class="m-0 text-xs text-muted" role="status">{{ fileNotice() }}</p>
+</ss-panel-section>

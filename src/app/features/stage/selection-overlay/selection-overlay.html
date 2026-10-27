@@ -1,0 +1,21 @@
+@if (snapX()) {
+  <div class="pointer-events-none absolute inset-y-0 left-1/2 w-px bg-[#ff4fd8]"></div>
+}
+@if (snapY()) {
+  <div class="pointer-events-none absolute inset-x-0 top-1/2 h-px bg-[#ff4fd8]"></div>
+}
+@if (box(); as b) {
+  <div
+    class="pointer-events-none absolute -m-0.5 box-content rounded-xs border border-dashed border-white p-px shadow-[0_0_0_1px_rgb(0_0_0/0.55)]"
+    [style.left]="b.left"
+    [style.top]="b.top"
+    [style.width]="b.width"
+    [style.height]="b.height"
+  >
+    <span
+      data-handle
+      class="pointer-events-auto absolute -right-[7px] -bottom-[7px] size-3 cursor-nwse-resize rounded-[3px] border-2 border-[#111] bg-white"
+      aria-hidden="true"
+    ></span>
+  </div>
+}

@@ -1,0 +1,50 @@
+<div class="mt-10 grid grid-cols-[1.2fr_1fr] gap-8 max-[900px]:grid-cols-1">
+  <section>
+    <h2 class="mt-0 mb-3 text-lg font-bold tracking-tight">Mettre l'animation sur le clavier</h2>
+    <ol class="m-0 grid max-w-[64ch] list-none gap-2.5 p-0">
+      @for (step of steps; track $index) {
+        <li class="grid grid-cols-[26px_1fr] items-start gap-2.5">
+          <span
+            class="grid size-6 place-items-center rounded-full border border-line-strong text-xs font-semibold tabular-nums"
+            aria-hidden="true"
+          >
+            {{ $index + 1 }}
+          </span>
+          <span>{{ step }}</span>
+        </li>
+      }
+    </ol>
+    <p class="mt-3 mb-0 text-xs text-muted">
+      Pilote officiel :
+      <a class="underline underline-offset-[3px]" [href]="driverUrl" target="_blank" rel="noopener">Epomaker</a>
+    </p>
+  </section>
+
+  <section>
+    <h2 class="mt-0 mb-3 text-lg font-bold tracking-tight">Ce que l'écran sait faire</h2>
+    <ul class="m-0 grid list-none gap-2 p-0">
+      @for (fact of facts; track fact.text) {
+        <li class="flex items-baseline gap-2.5">
+          <span
+            class="shrink-0 rounded-full px-[7px] py-px text-[11px] font-semibold"
+            [class]="fact.tag === 'Oui' ? 'bg-ok/15 text-ok' : 'bg-accent/15 text-accent'"
+          >
+            {{ fact.tag }}
+          </span>
+          <span>{{ fact.text }}</span>
+        </li>
+      }
+      <li class="flex items-baseline gap-2.5">
+        <span class="shrink-0 rounded-full border border-line bg-sunk px-[7px] py-px text-[11px] font-semibold text-muted">
+          Libre
+        </span>
+        <span>
+          Projets de la communauté :
+          @for (project of projects; track project.name; let last = $last) {
+            <a class="underline underline-offset-[3px]" [href]="project.url" target="_blank" rel="noopener">{{ project.name }}</a>{{ last ? '' : ', ' }}
+          }
+        </span>
+      </li>
+    </ul>
+  </section>
+</div>
