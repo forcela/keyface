@@ -15,7 +15,7 @@ const ADDABLE: readonly LayerType[] = ['time', 'date', 'battery', 'text', 'image
 
 /** Editor of the custom style: templates, layers, settings of the selected layer, style files. */
 @Component({
-  selector: 'ss-editor',
+  selector: 'kf-editor',
   imports: [PanelSection, Button, FileButton, LayerList, LayerProperties],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './editor.html',

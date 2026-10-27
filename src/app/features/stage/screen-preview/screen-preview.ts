@@ -10,7 +10,7 @@ import { SelectionOverlay } from '../selection-overlay/selection-overlay';
  * frame at the export timing, so what you see is exactly what gets exported.
  */
 @Component({
-  selector: 'ss-screen-preview',
+  selector: 'kf-screen-preview',
   imports: [SelectionOverlay],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -25,7 +25,7 @@ import { SelectionOverlay } from '../selection-overlay/selection-overlay';
         aria-label="Aperçu de l'écran du clavier"
       ></canvas>
       @if (editing()) {
-        <ss-selection-overlay />
+        <kf-selection-overlay />
       }
     </div>
   `,

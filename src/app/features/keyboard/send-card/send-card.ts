@@ -7,7 +7,7 @@ import { Button } from '@shared/ui/button/button';
  * it stays in sight next to the preview and next to the settings without being shown twice.
  */
 @Component({
-  selector: 'ss-send-card',
+  selector: 'kf-send-card',
   imports: [Button],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'sticky bottom-4 z-10 mt-5 block' },

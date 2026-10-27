@@ -24,7 +24,7 @@ export function layerName(layer: Layer): string {
 
 /** Layers from front to back, with visibility, order, duplicate and delete. */
 @Component({
-  selector: 'ss-layer-list',
+  selector: 'kf-layer-list',
   imports: [IconButton],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './layer-list.html',

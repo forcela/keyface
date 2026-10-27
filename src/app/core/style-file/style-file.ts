@@ -6,7 +6,7 @@ import { EFFECT_LABELS } from '@core/render/effects';
 import { AMBIANCE_LABELS } from '@core/render/scenery';
 import { MASCOT_LABELS } from '@core/render/sprites/mascots';
 
-export const STYLE_FILE_APP = 'screen-studio';
+export const STYLE_FILE_APP = 'keyface';
 export const STYLE_FILE_VERSION = 1;
 
 export interface StyleFile {
@@ -98,10 +98,10 @@ export function parseStyle(json: string): ParsedStyle {
   try {
     data = JSON.parse(json);
   } catch {
-    throw new StyleFileError("Ce fichier n'est pas un style Screen Studio.");
+    throw new StyleFileError("Ce fichier n'est pas un style Keyface.");
   }
   if (!isRecord(data) || data['app'] !== STYLE_FILE_APP) {
-    throw new StyleFileError("Ce fichier n'est pas un style Screen Studio.");
+    throw new StyleFileError("Ce fichier n'est pas un style Keyface.");
   }
   const frames = typeof data['frames'] === 'number' ? clamp(Math.round(data['frames']), 8, 140) : undefined;
   const delay = typeof data['delay'] === 'number' ? clamp(Math.round(data['delay']), 20, 300) : undefined;

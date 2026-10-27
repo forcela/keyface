@@ -30,7 +30,7 @@ jobs:
       - uses: actions/upload-pages-artifact@v5
         if: github.ref == 'refs/heads/main'
         with:
-          path: dist/screen-studio/browser
+          path: dist/keyface/browser
 
   deploy:
     if: github.ref == 'refs/heads/main'

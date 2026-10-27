@@ -8,7 +8,7 @@ const VARIANTS: Record<ButtonVariant, string> = {
 };
 
 @Component({
-  selector: 'ss-button',
+  selector: 'kf-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { '[class.block]': 'block()' },
   template: `

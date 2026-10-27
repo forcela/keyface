@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
 
 @Component({
-  selector: 'ss-color-field',
+  selector: 'kf-color-field',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="grid gap-1.5">
@@ -11,7 +11,7 @@ import { ChangeDetectionStrategy, Component, input, model } from '@angular/core'
       >
         <input
           type="color"
-          class="ss-color size-[26px] cursor-pointer rounded-full border-0 bg-transparent p-0"
+          class="kf-color size-[26px] cursor-pointer rounded-full border-0 bg-transparent p-0"
           [value]="value()"
           [attr.aria-label]="label()"
           (input)="value.set($any($event.target).value)"

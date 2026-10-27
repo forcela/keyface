@@ -4,7 +4,7 @@ let nextId = 0;
 
 /** A styled button that opens the file picker. */
 @Component({
-  selector: 'ss-file-button',
+  selector: 'kf-file-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <label
@@ -27,7 +27,7 @@ export class FileButton {
   readonly accept = input('');
   readonly picked = output<File>();
 
-  protected readonly id = `ss-file-${nextId++}`;
+  protected readonly id = `kf-file-${nextId++}`;
 
   protected pick(event: Event): void {
     const field = event.target as HTMLInputElement;

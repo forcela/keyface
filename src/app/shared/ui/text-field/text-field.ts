@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
 
 @Component({
-  selector: 'ss-text-field',
+  selector: 'kf-text-field',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <label class="grid gap-1.5">

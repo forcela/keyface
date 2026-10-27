@@ -5,14 +5,14 @@ import { RangeField } from '@shared/ui/range-field/range-field';
 import { SwitchField } from '@shared/ui/switch-field/switch-field';
 
 @Component({
-  selector: 'ss-info-settings',
+  selector: 'kf-info-settings',
   imports: [PanelSection, SwitchField, RangeField],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <ss-panel-section title="Infos">
-      <ss-switch-field label="Heure et date" [(checked)]="studio.showClock" />
-      <ss-switch-field label="Batterie" [(checked)]="studio.showBattery" />
-      <ss-range-field
+    <kf-panel-section title="Infos">
+      <kf-switch-field label="Heure et date" [(checked)]="studio.showClock" />
+      <kf-switch-field label="Batterie" [(checked)]="studio.showBattery" />
+      <kf-range-field
         label="Niveau dessiné"
         [max]="100"
         [format]="percent"
@@ -23,7 +23,7 @@ import { SwitchField } from '@shared/ui/switch-field/switch-field';
         clavier ne dit pas à l'animation si Verr. Maj est activé : ces états en direct ne sont visibles
         que sur sa page d'origine (Fn + Suppr).
       </p>
-    </ss-panel-section>
+    </kf-panel-section>
   `,
 })
 export class InfoSettings {

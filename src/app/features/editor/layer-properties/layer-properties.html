@@ -2,83 +2,83 @@
   <div class="grid gap-3">
     @switch (l.type) {
       @case ('background') {
-        <ss-segmented-control label="Type" [options]="backgroundModes" [value]="l.mode" (valueChange)="set({ mode: $event })" />
+        <kf-segmented-control label="Type" [options]="backgroundModes" [value]="l.mode" (valueChange)="set({ mode: $event })" />
         @if (l.mode === 'scenery') {
-          <ss-segmented-control label="Ambiance" [options]="ambiances" [value]="l.ambiance" (valueChange)="set({ ambiance: $event })" />
+          <kf-segmented-control label="Ambiance" [options]="ambiances" [value]="l.ambiance" (valueChange)="set({ ambiance: $event })" />
         } @else {
-          <ss-color-field label="Couleur" [value]="l.color" (valueChange)="set({ color: $event })" />
+          <kf-color-field label="Couleur" [value]="l.color" (valueChange)="set({ color: $event })" />
         }
         @if (l.mode === 'gradient' || l.mode === 'halo') {
-          <ss-color-field label="Couleur 2" [value]="l.color2" (valueChange)="set({ color2: $event })" />
+          <kf-color-field label="Couleur 2" [value]="l.color2" (valueChange)="set({ color2: $event })" />
         }
       }
       @case ('effect') {
-        <ss-segmented-control label="Effet" [wrap]="true" [options]="effects" [value]="l.kind" (valueChange)="set({ kind: $event })" />
-        <ss-color-field label="Couleur" [value]="l.color" (valueChange)="set({ color: $event })" />
+        <kf-segmented-control label="Effet" [wrap]="true" [options]="effects" [value]="l.kind" (valueChange)="set({ kind: $event })" />
+        <kf-color-field label="Couleur" [value]="l.color" (valueChange)="set({ color: $event })" />
         @if (hasCount(l.kind)) {
-          <ss-range-field label="Quantité" [min]="2" [max]="80" [value]="l.count" (valueChange)="set({ count: $event })" />
+          <kf-range-field label="Quantité" [min]="2" [max]="80" [value]="l.count" (valueChange)="set({ count: $event })" />
         }
       }
       @case ('time') {
-        <ss-text-look-fields [layer]="l" />
+        <kf-text-look-fields [layer]="l" />
       }
       @case ('date') {
-        <ss-segmented-control label="Format" [options]="dateFormats" [value]="l.format" (valueChange)="set({ format: $event })" />
-        <ss-text-look-fields [layer]="l" />
+        <kf-segmented-control label="Format" [options]="dateFormats" [value]="l.format" (valueChange)="set({ format: $event })" />
+        <kf-text-look-fields [layer]="l" />
       }
       @case ('text') {
-        <ss-text-field label="Texte" [value]="l.text" (valueChange)="set({ text: $event })" />
-        <ss-text-look-fields [layer]="l" />
+        <kf-text-field label="Texte" [value]="l.text" (valueChange)="set({ text: $event })" />
+        <kf-text-look-fields [layer]="l" />
       }
       @case ('battery') {
-        <ss-segmented-control label="Style" [options]="batteryStyles" [value]="l.style" (valueChange)="set({ style: $event })" />
-        <ss-color-field label="Couleur" [value]="l.color" (valueChange)="set({ color: $event })" />
-        <ss-range-field label="Taille" [min]="0.5" [max]="2.5" [step]="0.1" [format]="times" [value]="l.scale" (valueChange)="set({ scale: $event })" />
+        <kf-segmented-control label="Style" [options]="batteryStyles" [value]="l.style" (valueChange)="set({ style: $event })" />
+        <kf-color-field label="Couleur" [value]="l.color" (valueChange)="set({ color: $event })" />
+        <kf-range-field label="Taille" [min]="0.5" [max]="2.5" [step]="0.1" [format]="times" [value]="l.scale" (valueChange)="set({ scale: $event })" />
       }
       @case ('shape') {
-        <ss-segmented-control label="Forme" [options]="shapes" [value]="l.shape" (valueChange)="set({ shape: $event })" />
-        <ss-color-field label="Remplissage" [value]="l.fill" (valueChange)="set({ fill: $event })" />
-        <ss-range-field label="Largeur" [min]="2" [max]="128" [format]="pixels" [value]="l.width" (valueChange)="set({ width: $event })" />
-        <ss-range-field label="Hauteur" [min]="2" [max]="128" [format]="pixels" [value]="l.height" (valueChange)="set({ height: $event })" />
+        <kf-segmented-control label="Forme" [options]="shapes" [value]="l.shape" (valueChange)="set({ shape: $event })" />
+        <kf-color-field label="Remplissage" [value]="l.fill" (valueChange)="set({ fill: $event })" />
+        <kf-range-field label="Largeur" [min]="2" [max]="128" [format]="pixels" [value]="l.width" (valueChange)="set({ width: $event })" />
+        <kf-range-field label="Hauteur" [min]="2" [max]="128" [format]="pixels" [value]="l.height" (valueChange)="set({ height: $event })" />
         @if (l.shape === 'rect') {
-          <ss-range-field label="Arrondi" [max]="64" [format]="pixels" [value]="l.radius" (valueChange)="set({ radius: $event })" />
+          <kf-range-field label="Arrondi" [max]="64" [format]="pixels" [value]="l.radius" (valueChange)="set({ radius: $event })" />
         }
-        <ss-range-field label="Contour" [max]="4" [format]="pixels" [value]="l.strokeWidth" (valueChange)="set({ strokeWidth: $event })" />
+        <kf-range-field label="Contour" [max]="4" [format]="pixels" [value]="l.strokeWidth" (valueChange)="set({ strokeWidth: $event })" />
         @if (l.strokeWidth > 0) {
-          <ss-color-field label="Couleur du contour" [value]="l.stroke" (valueChange)="set({ stroke: $event })" />
+          <kf-color-field label="Couleur du contour" [value]="l.stroke" (valueChange)="set({ stroke: $event })" />
         }
       }
       @case ('image') {
         <div class="grid gap-1.5">
           <span class="text-[13px] font-medium">Image ou GIF</span>
           <div>
-            <ss-file-button
+            <kf-file-button
               [label]="l.src ? 'Changer…' : 'Choisir…'"
               accept="image/gif,image/webp,image/png,image/jpeg"
               (picked)="pickImage(l, $event)"
             />
           </div>
         </div>
-        <ss-range-field label="Largeur" [min]="8" [max]="128" [format]="pixels" [value]="l.width" (valueChange)="set({ width: $event })" />
-        <ss-range-field label="Hauteur" [min]="8" [max]="128" [format]="pixels" [value]="l.height" (valueChange)="set({ height: $event })" />
-        <ss-range-field label="Arrondi" [max]="64" [format]="pixels" [value]="l.radius" (valueChange)="set({ radius: $event })" />
-        <ss-range-field label="Contour" [max]="4" [format]="pixels" [value]="l.strokeWidth" (valueChange)="set({ strokeWidth: $event })" />
+        <kf-range-field label="Largeur" [min]="8" [max]="128" [format]="pixels" [value]="l.width" (valueChange)="set({ width: $event })" />
+        <kf-range-field label="Hauteur" [min]="8" [max]="128" [format]="pixels" [value]="l.height" (valueChange)="set({ height: $event })" />
+        <kf-range-field label="Arrondi" [max]="64" [format]="pixels" [value]="l.radius" (valueChange)="set({ radius: $event })" />
+        <kf-range-field label="Contour" [max]="4" [format]="pixels" [value]="l.strokeWidth" (valueChange)="set({ strokeWidth: $event })" />
         @if (l.strokeWidth > 0) {
-          <ss-color-field label="Couleur du contour" [value]="l.stroke" (valueChange)="set({ stroke: $event })" />
+          <kf-color-field label="Couleur du contour" [value]="l.stroke" (valueChange)="set({ stroke: $event })" />
         }
       }
       @case ('mascot') {
-        <ss-segmented-control label="Perso" [wrap]="true" [options]="mascots" [value]="l.mascot" (valueChange)="set({ mascot: $event })" />
-        <ss-segmented-control label="Taille" [options]="mascotSizes" [value]="l.scale" (valueChange)="set({ scale: $event })" />
-        <ss-color-field label="Couleur d'accent" [value]="l.accent" (valueChange)="set({ accent: $event })" />
+        <kf-segmented-control label="Perso" [wrap]="true" [options]="mascots" [value]="l.mascot" (valueChange)="set({ mascot: $event })" />
+        <kf-segmented-control label="Taille" [options]="mascotSizes" [value]="l.scale" (valueChange)="set({ scale: $event })" />
+        <kf-color-field label="Couleur d'accent" [value]="l.accent" (valueChange)="set({ accent: $event })" />
       }
     }
 
     @if (placed(); as p) {
-      <ss-range-field label="Position X" [max]="128" [value]="p.x" (valueChange)="set({ x: $event })" />
-      <ss-range-field label="Position Y" [max]="128" [value]="p.y" (valueChange)="set({ y: $event })" />
-      <ss-range-field label="Opacité" [min]="0.1" [max]="1" [step]="0.05" [format]="percent" [value]="p.opacity" (valueChange)="set({ opacity: $event })" />
-      <ss-segmented-control label="Animation" [wrap]="true" [options]="animations" [value]="p.animation" (valueChange)="set({ animation: $event })" />
+      <kf-range-field label="Position X" [max]="128" [value]="p.x" (valueChange)="set({ x: $event })" />
+      <kf-range-field label="Position Y" [max]="128" [value]="p.y" (valueChange)="set({ y: $event })" />
+      <kf-range-field label="Opacité" [min]="0.1" [max]="1" [step]="0.05" [format]="percent" [value]="p.opacity" (valueChange)="set({ opacity: $event })" />
+      <kf-segmented-control label="Animation" [wrap]="true" [options]="animations" [value]="p.animation" (valueChange)="set({ animation: $event })" />
     }
   </div>
 } @else {

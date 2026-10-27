@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, model } from '@angular/core';
 
 @Component({
-  selector: 'ss-range-field',
+  selector: 'kf-range-field',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <label class="grid gap-1.5">

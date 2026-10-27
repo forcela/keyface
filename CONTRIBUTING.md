@@ -17,7 +17,7 @@ See the project structure in the [README](README.md#project-structure). The one 
 
 Components follow these conventions, which the linter enforces where it can:
 
-- Standalone components with `ChangeDetectionStrategy.OnPush`, selector prefix `ss-`.
+- Standalone components with `ChangeDetectionStrategy.OnPush`, selector prefix `kf-`.
 - `inject()` in fields, signals for state, `input()` / `output()` / `model()` instead of decorators.
 - Tailwind classes in the template first. Plain CSS only for what utilities cannot express (see the bottom of `src/styles.css`).
 - About 140 lines per file at most. Split a big template by section. Static arrays longer than ~20 lines go to a sibling `*.constants.ts`.

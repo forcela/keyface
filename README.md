@@ -1,19 +1,19 @@
 <div align="center">
 
-# Screen Studio
+# Keyface
 
 **Make the tiny screen on your mechanical keyboard look good.**
 
 Ready-made animated styles and a drag-and-drop layer editor for the 128 × 128 TFT screen of the **Ajazz / Epomaker AK820 Pro**. Runs in the browser. Free and open source.
 
-[![CI](https://github.com/forcela/keyboard-screen-studio/actions/workflows/pages.yml/badge.svg)](https://github.com/forcela/keyboard-screen-studio/actions/workflows/pages.yml)
+[![CI](https://github.com/forcela/keyface/actions/workflows/pages.yml/badge.svg)](https://github.com/forcela/keyface/actions/workflows/pages.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-[**Open Screen Studio →**](https://forcela.github.io/keyboard-screen-studio/)
+[**Open Keyface →**](https://forcela.github.io/keyface/)
 
 [English](#english) · [Français](#français)
 
-![Screen Studio](docs/screenshot.jpg)
+![Keyface](docs/screenshot.jpg)
 
 </div>
 
@@ -23,7 +23,7 @@ Ready-made animated styles and a drag-and-drop layer editor for the 128 × 128 T
 
 ### What it does
 
-The AK820 Pro ships with a small 0.85" color screen (128 × 128 px) and a stock display most people find bland. Epomaker's official tool lets you upload your own animation, but you have to bring the frames yourself. Screen Studio makes those frames.
+The AK820 Pro ships with a small 0.85" color screen (128 × 128 px) and a stock display most people find bland. Epomaker's official tool lets you upload your own animation, but you have to bring the frames yourself. Keyface makes those frames.
 
 - **4 ready-made styles**
   - **Minimal**: date, big time, battery. Nothing else.
@@ -52,7 +52,7 @@ Use Chrome or Edge on a computer. Plug the keyboard in **with the USB cable**, s
 
 ### Or use the official tool
 
-1. In Screen Studio, pick or build a style and click **Exporter les images (.zip)**. Unzip it: you get `frame_000.png`, `frame_001.png`, …
+1. In Keyface, pick or build a style and click **Exporter les images (.zip)**. Unzip it: you get `frame_000.png`, `frame_001.png`, …
 2. Connect the keyboard **with the USB cable** and set its switch to **wired mode**.
 3. Open Epomaker's official tool for your model. For the ISO versions it is a **web page** that needs Chrome or Edge on a computer, for example [ajazz.driveall.cn](https://ajazz.driveall.cn/#/). Click **Ajouter un nouvel appareil** to pick your keyboard. For the ANSI version, Epomaker offers a [Windows application](https://epomaker.com/blogs/software/ajazz-ak820-pro-driver).
 4. In the tool, go to the screen (TFT) section, import **all the frames at once** and send them to the keyboard.
@@ -71,8 +71,8 @@ Button names differ between the tools and their versions, and the maintainers co
 Angular 22, TypeScript (strict), Tailwind CSS 4, Vitest. Package manager: pnpm.
 
 ```bash
-git clone https://github.com/forcela/keyboard-screen-studio.git
-cd keyboard-screen-studio
+git clone https://github.com/forcela/keyface.git
+cd keyface
 pnpm install
 pnpm start          # http://localhost:4200
 ```
@@ -82,7 +82,7 @@ pnpm start          # http://localhost:4200
 | `pnpm start` | Dev server with live reload |
 | `pnpm test` | Unit tests with coverage (fails under 70 % lines in `core`) |
 | `pnpm lint` | ESLint, Angular rules |
-| `pnpm build` | Production build in `dist/screen-studio/browser` |
+| `pnpm build` | Production build in `dist/keyface/browser` |
 | `pnpm check` | Tests, lint and build, as the CI runs them |
 
 Every push to `main` is tested and deployed to GitHub Pages by [`.github/workflows/pages.yml`](.github/workflows/pages.yml). In the repository settings, set **Pages → Source** to **GitHub Actions** once.
@@ -118,7 +118,7 @@ A saved style is JSON. Layers are drawn in order, the first one at the back. `x`
 
 ```json
 {
-  "app": "screen-studio",
+  "app": "keyface",
   "version": 1,
   "width": 128,
   "height": 128,
@@ -152,7 +152,7 @@ The screen specs and the upload sequence (128 × 128, RGB565, packets, frame lim
 [ak820pro-modder](https://github.com/wsclx/ak820pro-modder),
 [ajazzctl](https://github.com/SpawW/ajazzctl).
 
-Screen Studio is an independent project. It is not affiliated with or endorsed by Ajazz or Epomaker.
+Keyface is an independent project. It is not affiliated with or endorsed by Ajazz or Epomaker.
 
 ---
 
@@ -160,7 +160,7 @@ Screen Studio is an independent project. It is not affiliated with or endorsed b
 
 ### C'est quoi ?
 
-Le clavier **Ajazz / Epomaker AK820 Pro** a un petit écran couleur de 0,85" (128 × 128 px) dont l'affichage d'origine est assez triste. L'outil officiel d'Epomaker permet d'y mettre ta propre animation, mais il faut lui fournir les images. Screen Studio les fabrique pour toi, directement dans le navigateur.
+Le clavier **Ajazz / Epomaker AK820 Pro** a un petit écran couleur de 0,85" (128 × 128 px) dont l'affichage d'origine est assez triste. L'outil officiel d'Epomaker permet d'y mettre ta propre animation, mais il faut lui fournir les images. Keyface les fabrique pour toi, directement dans le navigateur.
 
 - **4 styles prêts** : Minimal, Paysage, Gen Z (5 persos pixel ou ton GIF), Lo-fi.
 - **Un éditeur Perso** : ajoute des calques (heure, date, batterie, texte, forme, image ou GIF, perso, effets), déplace-les à la souris, règle-les, anime-les, enregistre ton style en `.json`.
@@ -169,7 +169,7 @@ Le clavier **Ajazz / Epomaker AK820 Pro** a un petit écran couleur de 0,85" (12
 
 ### Mettre l'animation sur le clavier
 
-1. Exporte le `.zip` depuis Screen Studio et décompresse-le.
+1. Exporte le `.zip` depuis Keyface et décompresse-le.
 2. Branche le clavier **en câble USB**, interrupteur en **mode filaire**.
 3. Ouvre l'outil officiel de ton modèle. Pour les versions ISO, c'est une **page web** (Chrome ou Edge sur ordinateur), par exemple [ajazz.driveall.cn](https://ajazz.driveall.cn/#/) : clique sur **Ajouter un nouvel appareil** et choisis ton clavier. Pour l'ANSI, Epomaker propose une [application Windows](https://epomaker.com/blogs/software/ajazz-ak820-pro-driver).
 4. Dans l'outil, va dans la partie écran (TFT), importe **toutes les images d'un coup** et envoie-les au clavier.

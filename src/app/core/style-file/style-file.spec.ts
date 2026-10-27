@@ -10,7 +10,7 @@ const withoutId = (layer: Layer): Omit<Layer, 'id'> => {
 };
 
 const file = (overrides: Record<string, unknown> = {}) =>
-  JSON.stringify({ app: 'screen-studio', version: 1, frames: 48, delay: 80, layers: [], ...overrides });
+  JSON.stringify({ app: 'keyface', version: 1, frames: 48, delay: 80, layers: [], ...overrides });
 
 describe('style-file', () => {
   describe('round trip', () => {
@@ -55,7 +55,7 @@ describe('style-file', () => {
     });
 
     it('leaves frames and delay undefined when absent', () => {
-      const parsed = parseStyle(JSON.stringify({ app: 'screen-studio', layers: [] }));
+      const parsed = parseStyle(JSON.stringify({ app: 'keyface', layers: [] }));
       expect(parsed.frames).toBeUndefined();
       expect(parsed.delay).toBeUndefined();
     });

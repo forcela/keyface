@@ -70,7 +70,7 @@
 
 /* Native control chrome that utilities cannot reach. */
 @layer components {
-  .ss-switch {
+  .kf-switch {
     appearance: none;
     position: relative;
     width: 40px;
@@ -82,7 +82,7 @@
     cursor: pointer;
     transition: background 0.2s;
   }
-  .ss-switch::after {
+  .kf-switch::after {
     content: '';
     position: absolute;
     top: 2px;
@@ -94,24 +94,24 @@
     box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
     transition: transform 0.2s;
   }
-  .ss-switch:checked {
+  .kf-switch:checked {
     background: var(--ok);
   }
-  .ss-switch:checked::after {
+  .kf-switch:checked::after {
     transform: translateX(16px);
   }
-  .ss-color::-webkit-color-swatch-wrapper {
+  .kf-color::-webkit-color-swatch-wrapper {
     padding: 0;
   }
-  .ss-color::-webkit-color-swatch {
+  .kf-color::-webkit-color-swatch {
     border: 1px solid rgb(0 0 0 / 0.15);
     border-radius: 50%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ss-switch,
-  .ss-switch::after {
+  .kf-switch,
+  .kf-switch::after {
     transition: none;
   }
 }

@@ -16,7 +16,7 @@ const THUMB_LOOP_MS = 3600;
 
 /** One card per style, each with a small live thumbnail. */
 @Component({
-  selector: 'ss-theme-picker',
+  selector: 'kf-theme-picker',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="grid grid-cols-5 gap-1.5 max-[420px]:grid-cols-2">

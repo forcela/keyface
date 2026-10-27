@@ -13,7 +13,7 @@ const HIT_MARGIN = 3;
 
 /** Lets the user pick, move and resize layers right on the preview. */
 @Component({
-  selector: 'ss-selection-overlay',
+  selector: 'kf-selection-overlay',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'absolute inset-0 cursor-move',

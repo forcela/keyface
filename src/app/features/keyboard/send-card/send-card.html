@@ -19,8 +19,8 @@
         essayée sur un vrai clavier. L'ANSI n'est pas testé.
       </p>
       <div class="flex gap-2">
-        <ss-button (pressed)="keyboard.confirmSend()">Envoyer</ss-button>
-        <ss-button variant="ghost" (pressed)="keyboard.cancelConfirm()">Annuler</ss-button>
+        <kf-button (pressed)="keyboard.confirmSend()">Envoyer</kf-button>
+        <kf-button variant="ghost" (pressed)="keyboard.cancelConfirm()">Annuler</kf-button>
       </div>
     </div>
   } @else if (keyboard.busy()) {
@@ -36,13 +36,13 @@
         <div class="h-full bg-fg" [style.width.%]="percent()"></div>
       </div>
       <div>
-        <ss-button variant="ghost" [small]="true" (pressed)="keyboard.cancelTransfer()">Annuler l'envoi</ss-button>
+        <kf-button variant="ghost" [small]="true" (pressed)="keyboard.cancelTransfer()">Annuler l'envoi</kf-button>
       </div>
     </div>
   } @else {
     <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2.5">
       <p class="m-0 min-w-0 flex-1 basis-60 text-sm">{{ hint() }}</p>
-      <ss-button (pressed)="keyboard.requestSend()">Envoyer à mon clavier</ss-button>
+      <kf-button (pressed)="keyboard.requestSend()">Envoyer à mon clavier</kf-button>
     </div>
   }
 

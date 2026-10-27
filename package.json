@@ -1,11 +1,11 @@
 {
-  "name": "screen-studio",
+  "name": "keyface",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:pages": "ng build --base-href /keyboard-screen-studio/",
+    "build:pages": "ng build --base-href /keyface/",
     "test": "ng test --no-watch",
     "lint": "ng lint",
     "check": "ng test --no-watch && ng lint && ng build"

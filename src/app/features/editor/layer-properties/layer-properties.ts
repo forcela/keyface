@@ -24,7 +24,7 @@ import { TextLookFields } from './text-look-fields/text-look-fields';
 
 /** Settings of the selected layer. Which fields show depends on the layer type. */
 @Component({
-  selector: 'ss-layer-properties',
+  selector: 'kf-layer-properties',
   imports: [SegmentedControl, ColorField, RangeField, TextField, FileButton, TextLookFields],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './layer-properties.html',

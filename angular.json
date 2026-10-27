@@ -9,12 +9,12 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "screen-studio": {
+    "keyface": {
       "projectType": "application",
       "schematics": {},
       "root": "",
       "sourceRoot": "src",
-      "prefix": "ss",
+      "prefix": "kf",
       "architect": {
         "build": {
           "builder": "@angular/build:application",
@@ -62,10 +62,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "screen-studio:build:production"
+              "buildTarget": "keyface:build:production"
             },
             "development": {
-              "buildTarget": "screen-studio:build:development"
+              "buildTarget": "keyface:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -74,7 +74,7 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "runner": "vitest",
-            "buildTarget": "screen-studio:build:development",
+            "buildTarget": "keyface:build:development",
             "tsConfig": "tsconfig.spec.json",
             "coverage": true,
             "coverageReporters": [

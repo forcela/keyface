@@ -1,9 +1,9 @@
-<ss-panel-section title="Partir d'un modèle">
+<kf-panel-section title="Partir d'un modèle">
   <div class="flex flex-wrap gap-2">
     @for (template of templates; track template.id) {
-      <ss-button variant="ghost" [small]="true" (pressed)="applyTemplate(template.id, template.label)">
+      <kf-button variant="ghost" [small]="true" (pressed)="applyTemplate(template.id, template.label)">
         {{ template.label }}
-      </ss-button>
+      </kf-button>
     }
   </div>
   @if (editor.beforeTemplate()) {
@@ -14,25 +14,25 @@
       </button>
     </p>
   }
-</ss-panel-section>
+</kf-panel-section>
 
-<ss-panel-section title="Calques">
+<kf-panel-section title="Calques">
   <div class="flex flex-wrap gap-1.5">
     @for (item of addable; track item.type) {
-      <ss-button variant="ghost" [small]="true" (pressed)="editor.add(item.type)">+ {{ item.label }}</ss-button>
+      <kf-button variant="ghost" [small]="true" (pressed)="editor.add(item.type)">+ {{ item.label }}</kf-button>
     }
   </div>
-  <ss-layer-list />
-</ss-panel-section>
+  <kf-layer-list />
+</kf-panel-section>
 
-<ss-panel-section [title]="propsTitle()">
-  <ss-layer-properties />
-</ss-panel-section>
+<kf-panel-section [title]="propsTitle()">
+  <kf-layer-properties />
+</kf-panel-section>
 
-<ss-panel-section title="Ton style">
+<kf-panel-section title="Ton style">
   <div class="flex flex-wrap gap-2">
-    <ss-button variant="ghost" [small]="true" (pressed)="saveStyle()">Enregistrer (.json)</ss-button>
-    <ss-file-button label="Ouvrir un style…" accept="application/json,.json" (picked)="openStyle($event)" />
+    <kf-button variant="ghost" [small]="true" (pressed)="saveStyle()">Enregistrer (.json)</kf-button>
+    <kf-file-button label="Ouvrir un style…" accept="application/json,.json" (picked)="openStyle($event)" />
   </div>
   <p class="m-0 text-xs text-muted" role="status">{{ fileNotice() }}</p>
-</ss-panel-section>
+</kf-panel-section>

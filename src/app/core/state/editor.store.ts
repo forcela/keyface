@@ -5,7 +5,7 @@ import { TEMPLATES, TemplateId, createLayer, starterLayers } from '@core/render/
 import { Layer, LayerOf, LayerType, isPlaced } from '@core/render/layers/layer.model';
 import { restoreLayers } from '@core/style-file/style-file';
 
-const STORAGE_KEY = 'screen-studio.custom-style.v1';
+const STORAGE_KEY = 'keyface.custom-style.v1';
 const NUDGE_LIMIT = 128;
 
 /** Layers of the custom style, the selection, and their decoded images. */

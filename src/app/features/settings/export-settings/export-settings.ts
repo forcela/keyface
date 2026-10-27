@@ -6,19 +6,19 @@ import { PanelSection } from '@shared/ui/panel-section/panel-section';
 import { RangeField } from '@shared/ui/range-field/range-field';
 
 @Component({
-  selector: 'ss-export-settings',
+  selector: 'kf-export-settings',
   imports: [PanelSection, RangeField, Button],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <ss-panel-section title="Animation">
+    <kf-panel-section title="Animation">
       <div class="grid grid-cols-2 gap-3">
-        <ss-range-field
+        <kf-range-field
           label="Images"
           [min]="limits.frames.min"
           [max]="limits.frames.max"
           [(value)]="studio.frames"
         />
-        <ss-range-field
+        <kf-range-field
           label="Par image"
           [min]="limits.delay.min"
           [max]="limits.delay.max"
@@ -28,11 +28,11 @@ import { RangeField } from '@shared/ui/range-field/range-field';
         />
       </div>
       <div class="flex flex-wrap gap-2">
-        <ss-button [disabled]="busy()" (pressed)="exportFrames()">Exporter les images (.zip)</ss-button>
-        <ss-button variant="ghost" [disabled]="busy()" (pressed)="exportStill()">Image fixe (.png)</ss-button>
+        <kf-button [disabled]="busy()" (pressed)="exportFrames()">Exporter les images (.zip)</kf-button>
+        <kf-button variant="ghost" [disabled]="busy()" (pressed)="exportStill()">Image fixe (.png)</kf-button>
       </div>
       <p class="m-0 min-h-6 text-xs text-muted" role="status">{{ status() }}</p>
-    </ss-panel-section>
+    </kf-panel-section>
   `,
 })
 export class ExportSettings {

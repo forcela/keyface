@@ -1,4 +1,4 @@
-export const REPO_URL = 'https://github.com/forcela/keyboard-screen-studio';
+export const REPO_URL = 'https://github.com/forcela/keyface';
 
 export interface OfficialTool {
   label: string;

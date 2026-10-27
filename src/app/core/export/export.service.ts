@@ -19,7 +19,7 @@ export class ExportService {
   async exportStill(): Promise<void> {
     const canvas = new OffscreenCanvas(SCREEN_SIZE, SCREEN_SIZE);
     this.renderer.render(canvas.getContext('2d')!, this.studio.theme(), 0, readClock());
-    saveBlob(await canvas.convertToBlob({ type: 'image/png' }), `screen-studio-${this.studio.theme()}.png`);
+    saveBlob(await canvas.convertToBlob({ type: 'image/png' }), `keyface-${this.studio.theme()}.png`);
   }
 
   /** Every frame as a PNG in a zip, plus a short readme with the timing. */
@@ -34,7 +34,7 @@ export class ExportService {
     const theme = this.studio.theme();
     const frames = this.studio.frames();
     zip.file('LISEZMOI.txt', this.readme(themeById(theme).name, frames, this.studio.delay()));
-    saveBlob(await zip.generateAsync({ type: 'blob' }), `screen-studio-${theme}-${frames}-images.zip`);
+    saveBlob(await zip.generateAsync({ type: 'blob' }), `keyface-${theme}-${frames}-images.zip`);
   }
 
   private readme(style: string, frames: number, delay: number): string {

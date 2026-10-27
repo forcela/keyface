@@ -1,4 +1,4 @@
-<ss-panel-section title="Ton clavier">
+<kf-panel-section title="Ton clavier">
   @if (!keyboard.supported) {
     <p class="m-0 text-[13px]">{{ keyboard.unsupported }}</p>
     <p class="m-0 text-xs text-muted">Tu peux quand même exporter les images (section Animation).</p>
@@ -34,14 +34,14 @@
     }
 
     <div class="flex flex-wrap gap-2">
-      <ss-button variant="ghost" [small]="true" [disabled]="keyboard.busy()" (pressed)="keyboard.connect()">
+      <kf-button variant="ghost" [small]="true" [disabled]="keyboard.busy()" (pressed)="keyboard.connect()">
         {{ keyboard.keyboards().length ? 'Reconnecter' : 'Connecter sans envoyer' }}
-      </ss-button>
+      </kf-button>
       @if (keyboard.readyKeyboard() && !keyboard.busy()) {
-        <ss-button variant="ghost" [small]="true" (pressed)="keyboard.syncClock()">Régler l'heure du clavier</ss-button>
+        <kf-button variant="ghost" [small]="true" (pressed)="keyboard.syncClock()">Régler l'heure du clavier</kf-button>
       }
     </div>
 
-    <ss-keyboard-advanced />
+    <kf-keyboard-advanced />
   }
-</ss-panel-section>
+</kf-panel-section>

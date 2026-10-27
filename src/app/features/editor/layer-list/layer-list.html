@@ -4,7 +4,7 @@
       class="flex items-center gap-0.5 rounded-[10px] border p-[3px] pr-1"
       [class]="row.layer.id === editor.selectedId() ? 'border-fg bg-surface' : 'border-line bg-sunk'"
     >
-      <ss-icon-button
+      <kf-icon-button
         [icon]="row.layer.visible ? 'eye' : 'eye-off'"
         [label]="row.layer.visible ? 'Masquer' : 'Afficher'"
         (pressed)="editor.update(row.layer.id, { visible: !row.layer.visible })"
@@ -19,15 +19,15 @@
       >
         {{ name(row.layer) }}
       </button>
-      <ss-icon-button icon="up" label="Monter" [disabled]="!row.canRaise" (pressed)="editor.reorder(row.layer.id, 1)" />
-      <ss-icon-button icon="down" label="Descendre" [disabled]="!row.canLower" (pressed)="editor.reorder(row.layer.id, -1)" />
-      <ss-icon-button
+      <kf-icon-button icon="up" label="Monter" [disabled]="!row.canRaise" (pressed)="editor.reorder(row.layer.id, 1)" />
+      <kf-icon-button icon="down" label="Descendre" [disabled]="!row.canLower" (pressed)="editor.reorder(row.layer.id, -1)" />
+      <kf-icon-button
         icon="copy"
         label="Dupliquer"
         [disabled]="row.layer.type === 'background'"
         (pressed)="editor.duplicate(row.layer.id)"
       />
-      <ss-icon-button
+      <kf-icon-button
         icon="trash"
         label="Supprimer"
         [disabled]="row.layer.type === 'background'"

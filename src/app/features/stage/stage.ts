@@ -5,7 +5,7 @@ import { KEY_CAPS } from './stage.constants';
 
 /** Mock-up of the keyboard corner around the screen, with the live preview. */
 @Component({
-  selector: 'ss-stage',
+  selector: 'kf-stage',
   imports: [ScreenPreview],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './stage.html',

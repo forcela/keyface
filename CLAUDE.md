@@ -1,4 +1,4 @@
-# CLAUDE.md — Screen Studio
+# CLAUDE.md — Keyface
 
 À lire avant d'éditer. Ce fichier ne garde que ce que le code ne dit pas : pièges, raisons, interdits.
 Le code fait foi en cas de divergence — corriger ce fichier dans la même PR.
@@ -78,7 +78,7 @@ ses réglages, donc :
 
 ## 4. Conventions Angular (lint-enforced — `pnpm lint` doit rester vert)
 
-- `ChangeDetectionStrategy.OnPush` explicite sur **tout** composant. Sélecteur `ss-`.
+- `ChangeDetectionStrategy.OnPush` explicite sur **tout** composant. Sélecteur `kf-`.
 - `inject()` en champ, jamais d'injection par constructeur. Le constructeur sert aux `effect()`.
 - Signals partout : `input()` / `output()` / `model()` / `viewChild()`. Pas de décorateurs.
 - `@if` / `@for` (avec `track`) / `@switch`, jamais `*ngIf` / `*ngFor`.

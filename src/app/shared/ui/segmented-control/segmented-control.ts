@@ -11,7 +11,7 @@ export function segmentsOf<T extends string>(labels: Record<T, string>): Segment
 }
 
 @Component({
-  selector: 'ss-segmented-control',
+  selector: 'kf-segmented-control',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="grid gap-1.5">

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { Icon, IconName } from '../icon/icon';
 
 @Component({
-  selector: 'ss-icon-button',
+  selector: 'kf-icon-button',
   imports: [Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -13,7 +13,7 @@ import { Icon, IconName } from '../icon/icon';
       [disabled]="disabled()"
       (click)="pressed.emit()"
     >
-      <ss-icon [name]="icon()" />
+      <kf-icon [name]="icon()" />
     </button>
   `,
 })

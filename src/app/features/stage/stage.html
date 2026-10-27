@@ -27,7 +27,7 @@
       }
     </div>
     <div class="self-center rounded-xl bg-[#050506] p-[9px] shadow-[inset_0_0_0_1px_rgb(255_255_255/0.07)]">
-      <ss-screen-preview [showPixels]="showPixels()" />
+      <kf-screen-preview [showPixels]="showPixels()" />
     </div>
   </div>
 
@@ -35,7 +35,7 @@
     <span>Boucle de <b class="font-semibold text-fg">{{ loopLabel() }}</b></span>
     <label class="flex cursor-pointer items-center gap-3 font-medium">
       Voir les pixels
-      <input type="checkbox" class="ss-switch" [checked]="showPixels()" (change)="showPixels.set(!showPixels())" />
+      <input type="checkbox" class="kf-switch" [checked]="showPixels()" (change)="showPixels.set(!showPixels())" />
     </label>
   </div>
 

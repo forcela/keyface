@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { COMMUNITY_PROJECTS, INSTALL_DISCLAIMER, INSTALL_STEPS, OFFICIAL_TOOLS, SCREEN_FACTS } from './help.constants';
 
 @Component({
-  selector: 'ss-help',
+  selector: 'kf-help',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './help.html',
 })

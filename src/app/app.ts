@@ -13,7 +13,7 @@ import { Stage } from '@features/stage/stage';
 import { PanelSection } from '@shared/ui/panel-section/panel-section';
 
 @Component({
-  selector: 'ss-root',
+  selector: 'kf-root',
   imports: [Stage, ThemePicker, ThemeSettings, Editor, InfoSettings, ExportSettings, KeyboardPanel, SendCard, Help, PanelSection],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',

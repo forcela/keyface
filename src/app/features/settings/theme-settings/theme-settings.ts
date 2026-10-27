@@ -13,7 +13,7 @@ import { TextField } from '@shared/ui/text-field/text-field';
 
 /** Settings of the four ready-made styles. Only the section of the current style shows. */
 @Component({
-  selector: 'ss-theme-settings',
+  selector: 'kf-theme-settings',
   imports: [PanelSection, SegmentedControl, ColorField, TextField, FileButton, Button],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './theme-settings.html',

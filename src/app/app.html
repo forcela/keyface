@@ -2,7 +2,7 @@
   <header class="mb-6 flex flex-wrap items-end justify-between gap-x-8 gap-y-2.5">
     <div>
       <h1 class="m-0 text-[clamp(26px,3.4vw,34px)] leading-[1.1] font-bold tracking-[-.025em] text-balance">
-        Screen Studio<span class="text-accent">.</span>
+        Keyface<span class="text-accent">.</span>
       </h1>
       <p class="mt-1.5 mb-0 max-w-[58ch] text-[15px] text-muted">
         Quatre styles prêts et un éditeur pour le petit écran de ton clavier (Ajazz / Epomaker AK820 Pro).
@@ -17,28 +17,28 @@
   </header>
 
   <main class="grid grid-cols-[minmax(0,1.25fr)_minmax(320px,1fr)] items-start gap-5 max-[900px]:grid-cols-1">
-    <ss-stage />
+    <kf-stage />
     <div class="overflow-hidden rounded-[22px] border border-line bg-surface">
-      <ss-panel-section title="Style">
-        <ss-theme-picker />
-      </ss-panel-section>
+      <kf-panel-section title="Style">
+        <kf-theme-picker />
+      </kf-panel-section>
       @if (custom()) {
-        <ss-editor />
+        <kf-editor />
       } @else {
-        <ss-theme-settings />
+        <kf-theme-settings />
       }
-      <ss-info-settings />
-      <ss-export-settings />
-      <ss-keyboard-panel />
+      <kf-info-settings />
+      <kf-export-settings />
+      <kf-keyboard-panel />
     </div>
   </main>
 
-  <ss-send-card />
+  <kf-send-card />
 
-  <ss-help />
+  <kf-help />
 
   <footer class="mt-12 flex flex-wrap justify-between gap-3 border-t border-line pt-[18px] text-[13px] text-muted">
-    <span>Screen Studio · open source, licence MIT · non affilié à Ajazz ni à Epomaker</span>
+    <span>Keyface · open source, licence MIT · non affilié à Ajazz ni à Epomaker</span>
     <a class="underline underline-offset-[3px]" [href]="repoUrl" target="_blank" rel="noopener">Code sur GitHub</a>
   </footer>
 </div>

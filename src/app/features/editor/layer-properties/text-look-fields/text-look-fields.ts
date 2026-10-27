@@ -9,13 +9,13 @@ import { FONTS, WEIGHTS } from '../layer-options.constants';
 
 /** Typography settings shared by time, date and text layers. */
 @Component({
-  selector: 'ss-text-look-fields',
+  selector: 'kf-text-look-fields',
   imports: [SegmentedControl, RangeField, ColorField, SwitchField],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <ss-segmented-control label="Police" [options]="fonts" [value]="layer().font" (valueChange)="set({ font: $event })" />
-    <ss-segmented-control label="Graisse" [options]="weights" [value]="layer().weight" (valueChange)="set({ weight: $event })" />
-    <ss-range-field
+    <kf-segmented-control label="Police" [options]="fonts" [value]="layer().font" (valueChange)="set({ font: $event })" />
+    <kf-segmented-control label="Graisse" [options]="weights" [value]="layer().weight" (valueChange)="set({ weight: $event })" />
+    <kf-range-field
       label="Taille"
       [min]="6"
       [max]="64"
@@ -23,9 +23,9 @@ import { FONTS, WEIGHTS } from '../layer-options.constants';
       [value]="layer().size"
       (valueChange)="set({ size: $event })"
     />
-    <ss-color-field label="Couleur" [value]="layer().color" (valueChange)="set({ color: $event })" />
-    <ss-switch-field label="Ombre douce" [checked]="layer().shadow" (checkedChange)="set({ shadow: $event })" />
-    <ss-switch-field label="Majuscules" [checked]="layer().uppercase" (checkedChange)="set({ uppercase: $event })" />
+    <kf-color-field label="Couleur" [value]="layer().color" (valueChange)="set({ color: $event })" />
+    <kf-switch-field label="Ombre douce" [checked]="layer().shadow" (checkedChange)="set({ shadow: $event })" />
+    <kf-switch-field label="Majuscules" [checked]="layer().uppercase" (checkedChange)="set({ uppercase: $event })" />
   `,
 })
 export class TextLookFields {

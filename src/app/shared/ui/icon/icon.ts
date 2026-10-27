@@ -14,7 +14,7 @@ const PATHS: Record<IconName, string> = {
 
 /** Small stroke icon. Decorative: the button that holds it carries the accessible name. */
 @Component({
-  selector: 'ss-icon',
+  selector: 'kf-icon',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <svg
