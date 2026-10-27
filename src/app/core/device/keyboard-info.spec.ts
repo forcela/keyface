@@ -39,6 +39,13 @@ describe('keyboard-info', () => {
       expect(groupKeyboards([iface(USAGE_PAGE_CONTROL)])[0].via).toBe(false);
     });
 
+    it('flags a LampArray interface (usage page 0x59) without making the keyboard ready', () => {
+      const keyboard = groupKeyboards([iface(0x59, 0x1234)])[0];
+      expect(keyboard.lampArray).toBe(true);
+      expect(keyboard.ready).toBe(false);
+      expect(groupKeyboards([iface(USAGE_PAGE_CONTROL)])[0].lampArray).toBe(false);
+    });
+
     it('keeps different keyboards apart', () => {
       const keyboards = groupKeyboards([iface(USAGE_PAGE_CONTROL, 0x800a), iface(USAGE_PAGE_CONTROL, 0x8009)]);
       expect(keyboards.map((k) => k.id).sort()).toEqual(['0c45:8009', '0c45:800a']);

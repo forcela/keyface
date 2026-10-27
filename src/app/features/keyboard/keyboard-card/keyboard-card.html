@@ -24,6 +24,9 @@
     @if (keyboard().via) {
       <span class="rounded-full border border-line px-2 py-px text-[11px] font-medium">Compatible VIA</span>
     }
+    @if (keyboard().lampArray) {
+      <span class="rounded-full border border-line px-2 py-px text-[11px] font-medium">Éclairage dynamique</span>
+    }
   </div>
 
   @if (keyboard().via) {
@@ -49,6 +52,11 @@
     }
     <p class="m-0 text-xs text-muted">
       <b>Lecture seule :</b> Keyface n'écrit rien sur ce clavier. Pour le piloter, il faut d'abord une fiche de son modèle.
+    </p>
+  } @else if (keyboard().lampArray && keyboard().model === null) {
+    <p class="m-0 text-xs text-muted">
+      <b>Lecture seule :</b> ce clavier annonce le standard ouvert « Éclairage dynamique » (HID LampArray). Keyface le
+      détecte mais ne lui envoie rien pour l'instant. Pour le piloter, il faut d'abord une fiche de son modèle.
     </p>
   } @else if (keyboard().model === null) {
     <p class="m-0 text-xs text-muted">

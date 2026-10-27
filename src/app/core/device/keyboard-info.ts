@@ -12,6 +12,11 @@ export const USAGE_PAGE_CONTROL = 0xff13;
 /** Vendor-defined interface that takes the 4096-byte image data. */
 export const USAGE_PAGE_DATA = 0xff68;
 
+/** USB HID "Lighting and Illumination" page, home of the LampArray standard (Windows Dynamic Lighting). */
+export const LAMPARRAY_USAGE_PAGE = 0x59;
+/** The LampArray application collection. */
+export const LAMPARRAY_USAGE = 0x01;
+
 export interface DetectedKeyboard {
   /** `vvvv:pppp`, lowercase hex. */
   id: string;
@@ -27,6 +32,11 @@ export interface DetectedKeyboard {
    * what it can do: that comes from reading it, or from a profile.
    */
   via: boolean;
+  /**
+   * Exposes a HID LampArray interface (usage page 0x59), the open lighting standard. Only detected:
+   * nothing is read from it or written to it yet.
+   */
+  lampArray: boolean;
   /** Display name of the recognised model, or null. */
   model: string | null;
   /**
@@ -61,6 +71,7 @@ export function groupKeyboards(devices: readonly HidDeviceLike[]): DetectedKeybo
       collections: [],
       profile,
       via: false,
+      lampArray: false,
       model: profile?.name ?? null,
       ready: false,
     };
@@ -77,6 +88,7 @@ export function groupKeyboards(devices: readonly HidDeviceLike[]): DetectedKeybo
       ...entry,
       collections,
       via: hasUsagePage(entry, VIA_USAGE_PAGE),
+      lampArray: hasUsagePage(entry, LAMPARRAY_USAGE_PAGE),
       ready:
         entry.model !== null && hasUsagePage(entry, USAGE_PAGE_CONTROL) && hasUsagePage(entry, USAGE_PAGE_DATA),
     };

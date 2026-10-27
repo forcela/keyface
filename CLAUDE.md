@@ -82,6 +82,9 @@ ses réglages, donc :
   `0x15`). Ne jamais interroger le canal 0 (propre au clavier). La détection d'éclairage VIA est **indicative** : le
   clavier ne peut pas dire « voici mon éclairage », seules des définitions JSON de modèle le font. Vial n'est pas géré.
   Écrire sur un clavier VIA demande une fiche de modèle vérifiée sur du vrai matériel, comme pour l'AK820.
+- **LampArray (page 0x59) = détection seulement** : `lampArray` dit qu'un clavier annonce l'interface, rien n'est lu ni
+  envoyé. Les numéros de rapports viennent du descripteur de chaque appareil, jamais en dur. Le plan et ses sources
+  (vérifié / non vérifié) sont dans `docs/PLAN.md` : le relire avant d'ajouter une famille de claviers.
 - **Un clavier = une fiche** (`KeyboardProfile`) : identifiants USB, capacités (rétroéclairage, écran), niveau de
   preuve, dispositions confirmées. Ajouter un modèle = une fiche (+ un pilote si le protocole diffère), avec des
   observations sur du vrai matériel. Pas de fiche = jamais d'écriture.

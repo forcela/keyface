@@ -15,16 +15,17 @@
       <kf-button variant="ghost" [small]="true" [disabled]="keyboard.busy()" (pressed)="keyboard.connect()">
         {{ keyboard.keyboards().length ? 'Reconnecter' : 'Connecter sans envoyer' }}
       </kf-button>
-      <kf-button variant="ghost" [small]="true" [disabled]="keyboard.busy() || keyboard.viaBusy()" (pressed)="keyboard.detectVia()">
-        Détecter un clavier VIA
+      <kf-button variant="ghost" [small]="true" [disabled]="keyboard.busy() || keyboard.viaBusy()" (pressed)="keyboard.detectOpen()">
+        Détecter un autre clavier
       </kf-button>
       @if (keyboard.readyKeyboard() && !keyboard.busy()) {
         <kf-button variant="ghost" [small]="true" (pressed)="keyboard.syncClock()">Régler l'heure du clavier</kf-button>
       }
     </div>
     <p class="m-0 text-xs text-muted">
-      « Détecter un clavier VIA » lit seulement ce que le clavier annonce (claviers QMK : Keychron, Akko, claviers
-      « custom »…). Rien n'est écrit dessus.
+      « Détecter un autre clavier » cherche les claviers qui parlent un protocole ouvert : VIA (claviers QMK, comme
+      beaucoup de Keychron ou de claviers « custom ») ou Éclairage dynamique de Windows. Il lit seulement ce que le
+      clavier annonce. Rien n'est écrit dessus.
     </p>
 
     <kf-keyboard-advanced />

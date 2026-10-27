@@ -5,7 +5,7 @@ import { StudioStore } from '@core/state/studio.store';
 import { ViewStore } from '@core/state/view.store';
 import { UploadVariant, buildScreenPayload, toRgb565, ScreenFrame, SCREEN_WIDTH } from './ak820-protocol';
 import { Ak820Session, UploadCancelled } from './ak820-session';
-import { SONIX_VENDOR_ID, USAGE_PAGE_CONTROL, USAGE_PAGE_DATA, deviceId, diagnosticText, groupKeyboards } from './keyboard-info';
+import { LAMPARRAY_USAGE, LAMPARRAY_USAGE_PAGE, SONIX_VENDOR_ID, USAGE_PAGE_CONTROL, USAGE_PAGE_DATA, deviceId, diagnosticText, groupKeyboards } from './keyboard-info';
 import { AK820_PRO } from './keyboard-profiles';
 import { readBrowserSupport, unsupportedReason } from './browser-support';
 import { ViaInfo, readViaInfo } from './via/via-probe';
@@ -100,11 +100,19 @@ export class KeyboardService {
     }
   }
 
-  /** Opens the browser's chooser for VIA keyboards, then reads what they report. Reads only, never writes. */
-  async detectVia(): Promise<void> {
+  /**
+   * Opens the browser's chooser for keyboards that speak an open protocol (VIA, or the HID LampArray
+   * lighting standard), then reads what the VIA ones report. Reads only, never writes.
+   */
+  async detectOpen(): Promise<void> {
     if (!this.hid || this.busy() || this.viaBusy()) return;
     try {
-      await this.hid.requestDevice({ filters: [{ usagePage: VIA_USAGE_PAGE, usage: VIA_USAGE }] });
+      await this.hid.requestDevice({
+        filters: [
+          { usagePage: VIA_USAGE_PAGE, usage: VIA_USAGE },
+          { usagePage: LAMPARRAY_USAGE_PAGE, usage: LAMPARRAY_USAGE },
+        ],
+      });
     } catch (error) {
       // Closing the chooser without a choice is not a failure.
       if (error instanceof DOMException && error.name === 'NotFoundError') return;
@@ -152,8 +160,8 @@ export class KeyboardService {
     if (!chosen) return; // The chooser was closed without a choice.
     this.status.set(
       failure(
-        chosen.via && chosen.model === null
-          ? 'Clavier compatible VIA : Keyface sait seulement le lire pour l’instant, il ne peut pas encore le piloter.'
+        (chosen.via || chosen.lampArray) && chosen.model === null
+          ? 'Clavier compatible VIA ou Éclairage dynamique : Keyface sait seulement le détecter pour l’instant, il ne peut pas encore le piloter.'
           : chosen.model === null
             ? 'Modèle non reconnu : l’envoi est désactivé pour ne rien risquer. Copie le diagnostic (zone « Avancé »).'
             : 'Il manque une partie du clavier. Branche-le en USB (mode filaire) et sélectionne toutes ses entrées.',
