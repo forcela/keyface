@@ -1,4 +1,5 @@
 import { KeyboardProfile, findProfile } from './keyboard-profiles';
+import { VIA_USAGE_PAGE } from './via/via-protocol';
 import { HidCollectionInfo, HidDeviceLike } from './webhid.types';
 
 /** Pure description of what the browser reports about a connected HID device. No WebHID calls here. */
@@ -21,6 +22,11 @@ export interface DetectedKeyboard {
   collections: HidCollectionInfo[];
   /** The profile this keyboard matches, or null when the model is not known. */
   profile: KeyboardProfile | null;
+  /**
+   * Exposes the VIA raw HID interface (usage page 0xff60). This only says the keyboard speaks VIA, not
+   * what it can do: that comes from reading it, or from a profile.
+   */
+  via: boolean;
   /** Display name of the recognised model, or null. */
   model: string | null;
   /**
@@ -54,6 +60,7 @@ export function groupKeyboards(devices: readonly HidDeviceLike[]): DetectedKeybo
       productId: device.productId,
       collections: [],
       profile,
+      via: false,
       model: profile?.name ?? null,
       ready: false,
     };
@@ -69,6 +76,7 @@ export function groupKeyboards(devices: readonly HidDeviceLike[]): DetectedKeybo
     return {
       ...entry,
       collections,
+      via: hasUsagePage(entry, VIA_USAGE_PAGE),
       ready:
         entry.model !== null && hasUsagePage(entry, USAGE_PAGE_CONTROL) && hasUsagePage(entry, USAGE_PAGE_DATA),
     };

@@ -1,0 +1,64 @@
+<div class="grid gap-1.5 rounded-xl border border-line bg-sunk p-3">
+  <div class="flex items-center justify-between gap-2">
+    <b class="text-[13px] font-semibold">{{ keyboard().model ?? keyboard().name }}</b>
+    <span
+      class="rounded-full px-2 py-px text-[11px] font-semibold"
+      [class]="keyboard().ready ? 'bg-ok/15 text-ok' : 'bg-accent/15 text-accent'"
+    >
+      {{ keyboard().ready ? 'Prêt' : keyboard().model ? 'Incomplet' : 'Lecture seule' }}
+    </span>
+  </div>
+  <span class="text-xs text-muted tabular-nums">id {{ keyboard().id }}</span>
+
+  <div class="flex flex-wrap gap-1.5">
+    @if (keyboard().profile; as profile) {
+      @if (profile.capabilities.backlight) {
+        <span class="rounded-full border border-line px-2 py-px text-[11px] font-medium">Rétroéclairage</span>
+      }
+      @if (profile.capabilities.screen; as screen) {
+        <span class="rounded-full border border-line px-2 py-px text-[11px] font-medium tabular-nums">
+          Écran {{ screen.width }} × {{ screen.height }}
+        </span>
+      }
+    }
+    @if (keyboard().via) {
+      <span class="rounded-full border border-line px-2 py-px text-[11px] font-medium">Compatible VIA</span>
+    }
+  </div>
+
+  @if (keyboard().via) {
+    @if (via(); as info) {
+      <dl class="m-0 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-xs">
+        <dt class="text-muted">Protocole VIA</dt>
+        <dd class="m-0 tabular-nums">v{{ info.protocolVersion }}</dd>
+        <dt class="text-muted">Couches de touches</dt>
+        <dd class="m-0 tabular-nums">{{ info.layerCount ?? 'non lu' }}</dd>
+        <dt class="text-muted">Firmware</dt>
+        <dd class="m-0 tabular-nums">{{ firmware() }}</dd>
+        <dt class="text-muted">Éclairage détecté</dt>
+        <dd class="m-0">{{ lighting() || 'aucun éclairage VIA vu (il peut en avoir un autre type)' }}</dd>
+      </dl>
+    } @else if (via() === null) {
+      <p class="m-0 text-xs text-muted">Ce clavier n'a pas répondu comme un clavier VIA.</p>
+    } @else {
+      <div>
+        <kf-button variant="ghost" [small]="true" [disabled]="service.viaBusy()" (pressed)="service.readVia(keyboard().id)">
+          Lire les infos VIA
+        </kf-button>
+      </div>
+    }
+    <p class="m-0 text-xs text-muted">
+      <b>Lecture seule :</b> Keyface n'écrit rien sur ce clavier. Pour le piloter, il faut d'abord une fiche de son modèle.
+    </p>
+  } @else if (keyboard().model === null) {
+    <p class="m-0 text-xs text-muted">
+      Modèle non reconnu : l'envoi est désactivé, pour ne rien risquer sur un clavier que ce projet ne connaît pas.
+      Copie le diagnostic (zone « Avancé ») dans un ticket GitHub pour qu'on l'ajoute.
+    </p>
+  } @else if (!keyboard().ready) {
+    <p class="m-0 text-xs text-muted">
+      Il manque une partie du clavier. Branche-le avec le câble USB, interrupteur en mode filaire, puis clique sur
+      « Reconnecter » et sélectionne <b>toutes</b> ses entrées dans la fenêtre.
+    </p>
+  }
+</div>

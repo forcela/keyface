@@ -8,6 +8,8 @@ import { Ak820Session, UploadCancelled } from './ak820-session';
 import { SONIX_VENDOR_ID, USAGE_PAGE_CONTROL, USAGE_PAGE_DATA, deviceId, diagnosticText, groupKeyboards } from './keyboard-info';
 import { AK820_PRO } from './keyboard-profiles';
 import { readBrowserSupport, unsupportedReason } from './browser-support';
+import { ViaInfo, readViaInfo } from './via/via-probe';
+import { VIA_USAGE, VIA_USAGE_PAGE } from './via/via-protocol';
 import { HidDevice, getHidApi } from './webhid.types';
 
 export type TransferState = 'idle' | 'working' | 'done' | 'error';
@@ -53,6 +55,10 @@ export class KeyboardService {
   /** What the page shows features for: the connected model, or the AK820 Pro until one is connected. */
   readonly profile = computed(() => this.readyKeyboard()?.profile ?? AK820_PRO);
 
+  /** What was read from VIA keyboards, by keyboard id. `null` means it was tried and did not answer like VIA. */
+  readonly viaInfo = signal<Readonly<Record<string, ViaInfo | null>>>({});
+  readonly viaBusy = signal(false);
+
   /** The write the user is being asked to confirm, or null. */
   readonly pending = signal<SendKind | null>(null);
   /** Ticked by the user: "my keyboard is the model and layout this was confirmed on". Reset each time. */
@@ -94,6 +100,38 @@ export class KeyboardService {
     }
   }
 
+  /** Opens the browser's chooser for VIA keyboards, then reads what they report. Reads only, never writes. */
+  async detectVia(): Promise<void> {
+    if (!this.hid || this.busy() || this.viaBusy()) return;
+    try {
+      await this.hid.requestDevice({ filters: [{ usagePage: VIA_USAGE_PAGE, usage: VIA_USAGE }] });
+    } catch (error) {
+      // Closing the chooser without a choice is not a failure.
+      if (error instanceof DOMException && error.name === 'NotFoundError') return;
+      this.status.set(failure(this.messageOf(error)));
+      return;
+    }
+    await this.refresh();
+    await this.readVia();
+  }
+
+  /** Reads the VIA information of every VIA keyboard that has not been read yet (or of one, again). */
+  async readVia(onlyId?: string): Promise<void> {
+    if (this.viaBusy()) return;
+    this.viaBusy.set(true);
+    try {
+      for (const device of this.devices()) {
+        const id = deviceId(device);
+        const isVia = device.collections.some((c) => c.usagePage === VIA_USAGE_PAGE && c.usage === VIA_USAGE);
+        if (!isVia || (onlyId ? id !== onlyId : id in this.viaInfo())) continue;
+        const info = await readViaInfo(device).catch(() => null);
+        this.viaInfo.update((all) => ({ ...all, [id]: info }));
+      }
+    } finally {
+      this.viaBusy.set(false);
+    }
+  }
+
   /**
    * One-click flow behind the send button: pick a keyboard if none is ready, then ask for
    * confirmation. Nothing is written until `confirmSend()`.
@@ -114,9 +152,11 @@ export class KeyboardService {
     if (!chosen) return; // The chooser was closed without a choice.
     this.status.set(
       failure(
-        chosen.model === null
-          ? 'Modèle non reconnu : l’envoi est désactivé pour ne rien risquer. Copie le diagnostic (zone « Avancé »).'
-          : 'Il manque une partie du clavier. Branche-le en USB (mode filaire) et sélectionne toutes ses entrées.',
+        chosen.via && chosen.model === null
+          ? 'Clavier compatible VIA : Keyface sait seulement le lire pour l’instant, il ne peut pas encore le piloter.'
+          : chosen.model === null
+            ? 'Modèle non reconnu : l’envoi est désactivé pour ne rien risquer. Copie le diagnostic (zone « Avancé »).'
+            : 'Il manque une partie du clavier. Branche-le en USB (mode filaire) et sélectionne toutes ses entrées.',
       ),
     );
   }

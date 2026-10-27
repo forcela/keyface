@@ -4,41 +4,7 @@
     <p class="m-0 text-xs text-muted">Tu peux quand même exporter les images (section Animation).</p>
   } @else {
     @for (kb of keyboard.keyboards(); track kb.id) {
-      <div class="grid gap-1 rounded-xl border border-line bg-sunk p-3">
-        <div class="flex items-center justify-between gap-2">
-          <b class="text-[13px] font-semibold">{{ kb.model ?? kb.name }}</b>
-          <span
-            class="rounded-full px-2 py-px text-[11px] font-semibold"
-            [class]="kb.ready ? 'bg-ok/15 text-ok' : 'bg-accent/15 text-accent'"
-          >
-            {{ kb.ready ? 'Prêt' : 'Incomplet' }}
-          </span>
-        </div>
-        <span class="text-xs text-muted tabular-nums">id {{ kb.id }}</span>
-        @if (kb.profile; as profile) {
-          <div class="flex flex-wrap gap-1.5">
-            @if (profile.capabilities.backlight) {
-              <span class="rounded-full border border-line px-2 py-px text-[11px] font-medium">Rétroéclairage</span>
-            }
-            @if (profile.capabilities.screen; as screen) {
-              <span class="rounded-full border border-line px-2 py-px text-[11px] font-medium tabular-nums">
-                Écran {{ screen.width }} × {{ screen.height }}
-              </span>
-            }
-          </div>
-        }
-        @if (kb.model === null) {
-          <p class="m-0 text-xs text-muted">
-            Modèle non reconnu : l'envoi est désactivé, pour ne rien risquer sur un clavier que ce projet ne
-            connaît pas. Copie le diagnostic (zone « Avancé ») dans un ticket GitHub pour qu'on l'ajoute.
-          </p>
-        } @else if (!kb.ready) {
-          <p class="m-0 text-xs text-muted">
-            Il manque une partie du clavier. Branche-le avec le câble USB, interrupteur en mode filaire, puis
-            clique sur « Reconnecter » et sélectionne <b>toutes</b> ses entrées dans la fenêtre.
-          </p>
-        }
-      </div>
+      <kf-keyboard-card [keyboard]="kb" />
     } @empty {
       <p class="m-0 text-xs text-muted">
         Aucun clavier connecté. Le bouton « Envoyer à mon clavier », sous l'aperçu, s'en occupe en un clic.
@@ -49,10 +15,17 @@
       <kf-button variant="ghost" [small]="true" [disabled]="keyboard.busy()" (pressed)="keyboard.connect()">
         {{ keyboard.keyboards().length ? 'Reconnecter' : 'Connecter sans envoyer' }}
       </kf-button>
+      <kf-button variant="ghost" [small]="true" [disabled]="keyboard.busy() || keyboard.viaBusy()" (pressed)="keyboard.detectVia()">
+        Détecter un clavier VIA
+      </kf-button>
       @if (keyboard.readyKeyboard() && !keyboard.busy()) {
         <kf-button variant="ghost" [small]="true" (pressed)="keyboard.syncClock()">Régler l'heure du clavier</kf-button>
       }
     </div>
+    <p class="m-0 text-xs text-muted">
+      « Détecter un clavier VIA » lit seulement ce que le clavier annonce (claviers QMK : Keychron, Akko, claviers
+      « custom »…). Rien n'est écrit dessus.
+    </p>
 
     <kf-keyboard-advanced />
   }

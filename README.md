@@ -136,12 +136,17 @@ A saved style is JSON. Layers are drawn in order, the first one at the back. `x`
 
 Fields that are missing take their default. Unknown types and values are dropped, so a hand-edited file can not break the page.
 
+### VIA keyboards (read only)
+
+**Détecter un clavier VIA** reads what a QMK/VIA keyboard (Keychron, many Akko and custom boards) announces: VIA protocol version, number of key layers, firmware version, and which lighting channels answer. It sends four kinds of "get" requests and **writes nothing**: the code refuses to build any other request, and a test pins that. Controlling a VIA keyboard (colours, keys) needs a profile for its model and is not done yet. Vial keyboards use a different command set and are not covered.
+
 ### How other keyboards will be added
 
 Each keyboard is described by a **profile** (`src/app/core/device/keyboard-profiles.ts`): its USB ids, what it can do (backlight with its effects, screen with its size) and how well that is established. The page recognises a connected keyboard from its profile and only shows what it can do. **A keyboard with no profile is never written to.** A keyboard family that speaks a different protocol needs its own driver next to `ak820-session.ts`. A keyboard cannot report "I have RGB" or "I have a screen" over USB, so models have to be added one by one, from observations on real hardware.
 
 ### Roadmap
 
+- [ ] Drive VIA keyboards (lighting first), once a model has been verified on real hardware
 - [ ] Standby timer and per-key colours from the page
 - [ ] English interface
 - [ ] Other screen sizes and other keyboards with a TFT screen

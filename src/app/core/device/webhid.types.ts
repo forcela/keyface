@@ -25,8 +25,9 @@ export interface HidDevice extends HidDeviceLike, EventTarget {
 }
 
 export interface HidDeviceFilter {
-  vendorId: number;
+  vendorId?: number;
   usagePage?: number;
+  usage?: number;
 }
 
 export interface HidApi extends EventTarget {

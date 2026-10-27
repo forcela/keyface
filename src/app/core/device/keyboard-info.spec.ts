@@ -32,6 +32,13 @@ describe('keyboard-info', () => {
       expect(unknown.ready).toBe(false);
     });
 
+    it('flags a keyboard that exposes the VIA raw HID interface, without making it ready', () => {
+      const keyboard = groupKeyboards([iface(0xff60, 0x1234), iface(USAGE_PAGE_CONTROL, 0x1234)])[0];
+      expect(keyboard.via).toBe(true);
+      expect(keyboard.ready).toBe(false);
+      expect(groupKeyboards([iface(USAGE_PAGE_CONTROL)])[0].via).toBe(false);
+    });
+
     it('keeps different keyboards apart', () => {
       const keyboards = groupKeyboards([iface(USAGE_PAGE_CONTROL, 0x800a), iface(USAGE_PAGE_CONTROL, 0x8009)]);
       expect(keyboards.map((k) => k.id).sort()).toEqual(['0c45:8009', '0c45:800a']);
