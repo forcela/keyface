@@ -2,23 +2,69 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <title>Screen Studio · animations pour l'écran de ton clavier</title>
+    <title>AK820 Pro Screen Studio · écran GIF, heure et batterie</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta
       name="description"
-      content="Crée des animations 128×128 pour l'écran TFT de ton clavier mécanique (Ajazz / Epomaker AK820 Pro) : styles prêts, éditeur à calques, export d'images pour le pilote. Gratuit, open source, dans le navigateur."
+      content="Crée et envoie des animations (GIF, heure, batterie) sur l'écran 128×128 de ton clavier Ajazz / Epomaker AK820 Pro. Gratuit, open source, dans le navigateur."
     />
+    <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#111113" />
+    <link rel="canonical" href="https://forcela.github.io/keyboard-screen-studio/" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Screen Studio" />
+    <meta property="og:site_name" content="Screen Studio" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:url" content="https://forcela.github.io/keyboard-screen-studio/" />
+    <meta property="og:title" content="AK820 Pro Screen Studio · écran GIF, heure et batterie" />
     <meta
       property="og:description"
-      content="Animations et éditeur pour l'écran TFT des claviers Ajazz / Epomaker AK820 Pro."
+      content="Crée et envoie des animations sur l'écran de ton clavier Ajazz / Epomaker AK820 Pro. Gratuit et open source."
     />
-    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <meta property="og:image" content="https://forcela.github.io/keyboard-screen-studio/og-image.jpg" />
+    <meta property="og:image:alt" content="Screen Studio : aperçu de l'écran du clavier et réglages" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Screen Studio",
+        "alternateName": "AK820 Pro Screen Studio",
+        "description": "Web app to design and send custom animations to the 128x128 TFT screen of the Ajazz / Epomaker AK820 Pro keyboard.",
+        "url": "https://forcela.github.io/keyboard-screen-studio/",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Any, with Google Chrome or Microsoft Edge",
+        "inLanguage": "fr",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+        "license": "https://opensource.org/licenses/MIT",
+        "sameAs": ["https://github.com/forcela/keyboard-screen-studio"]
+      }
+    </script>
   </head>
   <body>
-    <ss-root></ss-root>
+    <ss-root>
+      <!-- Shown to search engines and before the app loads; replaced as soon as Angular starts. -->
+      <main style="font-family: system-ui, sans-serif; max-width: 60ch; margin: 3rem auto; padding: 0 1rem">
+        <h1>Screen Studio, l'écran de ton clavier AK820 Pro</h1>
+        <p>
+          Crée des animations (GIF, heure, batterie) pour le petit écran 128×128 de ton clavier mécanique
+          <strong>Ajazz / Epomaker AK820 Pro</strong>, puis envoie-les directement au clavier depuis Chrome ou
+          Edge, ou exporte les images. Gratuit, open source, sans compte.
+        </p>
+        <p lang="en">
+          Design custom animations, GIFs, clock and battery for the TFT screen of the
+          <strong>Ajazz / Epomaker AK820 Pro</strong> mechanical keyboard, and send them straight to the keyboard
+          from Chrome or Edge. Free and open source.
+        </p>
+        <p>
+          <a href="https://github.com/forcela/keyboard-screen-studio">Code source sur GitHub</a> · JavaScript
+          requis pour utiliser l'éditeur.
+        </p>
+      </main>
+    </ss-root>
   </body>
 </html>
