@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, signal } f
 import { KeyboardService } from '@core/device/keyboard.service';
 import { channelSupports } from '@core/device/via/via-lighting';
 import { LIGHTING_CHANNELS, LightingChannelId } from '@core/device/via/via-protocol';
+import { ViewStore } from '@core/state/view.store';
 import { Button } from '@shared/ui/button/button';
 import { ColorField } from '@shared/ui/color-field/color-field';
 import { RangeField } from '@shared/ui/range-field/range-field';
@@ -25,6 +26,7 @@ export class ViaLighting {
   readonly kinds = input.required<readonly LightingChannelId[]>();
 
   protected readonly service = inject(KeyboardService);
+  protected readonly view = inject(ViewStore);
   protected readonly percent = percent;
 
   protected readonly choices = computed(() => LIGHTING_CHANNELS.filter((c) => this.kinds().includes(c.id)));

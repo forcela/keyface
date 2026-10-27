@@ -7,27 +7,32 @@
       <kf-keyboard-card [keyboard]="kb" />
     } @empty {
       <p class="m-0 text-xs text-muted">
-        Aucun clavier connecté. Le bouton « Envoyer à mon clavier », sous l'aperçu, s'en occupe en un clic.
+        Branche ton clavier en USB, puis clique sur « Connecter mon clavier ».
       </p>
     }
 
     <div class="flex flex-wrap gap-2">
-      <kf-button variant="ghost" [small]="true" [disabled]="keyboard.busy()" (pressed)="keyboard.connect()">
-        {{ keyboard.keyboards().length ? 'Reconnecter' : 'Connecter sans envoyer' }}
-      </kf-button>
-      <kf-button variant="ghost" [small]="true" [disabled]="keyboard.busy() || keyboard.viaBusy()" (pressed)="keyboard.detectOpen()">
-        Détecter un autre clavier
+      <kf-button
+        [variant]="keyboard.keyboards().length ? 'ghost' : 'solid'"
+        [small]="true"
+        [disabled]="keyboard.busy() || keyboard.viaBusy()"
+        (pressed)="keyboard.connect()"
+      >
+        {{ keyboard.keyboards().length ? 'Ajouter ou reconnecter' : 'Connecter mon clavier' }}
       </kf-button>
       @if (keyboard.readyKeyboard() && !keyboard.busy()) {
         <kf-button variant="ghost" [small]="true" (pressed)="keyboard.syncClock()">Régler l'heure du clavier</kf-button>
       }
     </div>
-    <p class="m-0 text-xs text-muted">
-      « Détecter un autre clavier » cherche les claviers qui parlent un protocole ouvert : VIA (claviers QMK, comme
-      beaucoup de Keychron ou de claviers « custom ») ou Éclairage dynamique de Windows. Il lit seulement ce que le
-      clavier annonce. Rien n'est écrit dessus.
-    </p>
 
-    <kf-keyboard-advanced />
+    <kf-switch-field label="Afficher les détails techniques" [(checked)]="view.showDetails" />
+    @if (view.showDetails()) {
+      <p class="m-0 text-xs text-muted">
+        Keyface cherche les claviers AK820 Pro, les claviers VIA (QMK : beaucoup de Keychron, des claviers « custom »)
+        et ceux qui annoncent l'Éclairage dynamique de Windows. Il lit ce que le clavier annonce, rien de plus, avant
+        que tu demandes un envoi.
+      </p>
+      <kf-keyboard-advanced />
+    }
   }
 </kf-panel-section>

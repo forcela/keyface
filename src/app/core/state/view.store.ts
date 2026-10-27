@@ -6,4 +6,6 @@ export type ViewMode = 'screen' | 'lighting';
 @Injectable({ providedIn: 'root' })
 export class ViewStore {
   readonly mode = signal<ViewMode>('screen');
+  /** Technical information (ids, protocol, firmware, notes). Off by default: most people do not need it. */
+  readonly showDetails = signal(false);
 }

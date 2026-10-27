@@ -1,5 +1,5 @@
-<div class="grid gap-2 rounded-lg border border-line bg-surface p-3">
-  <b class="text-[13px] font-semibold">Éclairage du clavier <span class="font-normal text-accent">(expérimental)</span></b>
+<div class="grid gap-2.5 rounded-lg border border-line bg-surface p-3">
+  <b class="text-[13px] font-semibold">Éclairage <span class="font-normal text-accent">(essai)</span></b>
 
   @if (choices().length > 1) {
     <label class="grid gap-1 text-xs text-muted">
@@ -19,25 +19,23 @@
   @if (hasSpeed()) {
     <kf-range-field label="Vitesse" [(value)]="speed" [min]="0" [max]="255" [format]="percent" />
   }
-  <kf-switch-field label="Changer aussi l'effet" [(checked)]="changeEffect" />
-  @if (changeEffect()) {
-    <kf-range-field label="Effet n° (0 = éteint)" [(value)]="effect" [min]="0" [max]="45" />
-    <p class="m-0 text-xs text-muted">
-      Les numéros d'effets dépendent du firmware de chaque clavier. Essaie-les un par un.
-    </p>
+
+  @if (view.showDetails()) {
+    <kf-switch-field label="Changer aussi l'effet" [(checked)]="changeEffect" />
+    @if (changeEffect()) {
+      <kf-range-field label="Effet n° (0 = éteint)" [(value)]="effect" [min]="0" [max]="45" />
+      <p class="m-0 text-xs text-muted">Les numéros d'effets dépendent du firmware de chaque clavier. Essaie-les un par un.</p>
+    }
   }
 
-  <kf-switch-field label="Je sais que c'est expérimental sur ce modèle" [(checked)]="service.viaConsent" />
-  <p class="m-0 text-xs text-muted">
-    « Appliquer » change l'éclairage sans le mémoriser : il revient quand tu débranches le clavier.
-    « Enregistrer sur le clavier » l'écrit dans sa mémoire (à faire une fois, pas à chaque essai).
-  </p>
+  <kf-switch-field label="J'ai compris : c'est un essai" [(checked)]="service.viaConsent" />
   <div class="flex flex-wrap gap-2">
     <kf-button [small]="true" [disabled]="!service.viaConsent() || service.busy()" (pressed)="apply(false)">Appliquer</kf-button>
     <kf-button variant="ghost" [small]="true" [disabled]="!service.viaConsent() || service.busy()" (pressed)="apply(true)">
       Enregistrer sur le clavier
     </kf-button>
   </div>
+  <p class="m-0 text-xs text-muted">« Appliquer » est temporaire : tout revient quand tu débranches le clavier.</p>
 
   @if (service.status(); as status) {
     @if (status.message) {

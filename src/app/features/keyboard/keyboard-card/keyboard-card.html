@@ -1,75 +1,73 @@
-<div class="grid gap-1.5 rounded-xl border border-line bg-sunk p-3">
+<div class="grid gap-2 rounded-xl border border-line bg-sunk p-3">
   <div class="flex items-center justify-between gap-2">
-    <b class="text-[13px] font-semibold">{{ keyboard().model ?? keyboard().name }}</b>
-    <span
-      class="rounded-full px-2 py-px text-[11px] font-semibold"
-      [class]="keyboard().ready ? 'bg-ok/15 text-ok' : 'bg-accent/15 text-accent'"
-    >
-      {{ keyboard().ready ? 'Prêt' : keyboard().model ? 'Incomplet' : keyboard().via ? 'Éclairage expérimental' : 'Lecture seule' }}
-    </span>
+    <b class="min-w-0 text-[13px] font-semibold">{{ keyboard().model ?? keyboard().name }}</b>
+    <span class="shrink-0 rounded-full px-2 py-px text-[11px] font-semibold" [class]="statusClass()">{{ statusLabel() }}</span>
   </div>
-  <span class="text-xs text-muted tabular-nums">id {{ keyboard().id }}</span>
 
-  <div class="flex flex-wrap gap-1.5">
-    @if (keyboard().profile; as profile) {
-      @if (profile.capabilities.backlight) {
-        <span class="rounded-full border border-line px-2 py-px text-[11px] font-medium">Rétroéclairage</span>
+  @if (chips().length) {
+    <div class="flex flex-wrap gap-1.5">
+      @for (chip of chips(); track chip) {
+        <span class="rounded-full border border-line px-2 py-px text-[11px] font-medium tabular-nums">{{ chip }}</span>
       }
-      @if (profile.capabilities.screen; as screen) {
-        <span class="rounded-full border border-line px-2 py-px text-[11px] font-medium tabular-nums">
-          Écran {{ screen.width }} × {{ screen.height }}
-        </span>
-      }
-    }
-    @if (keyboard().via) {
-      <span class="rounded-full border border-line px-2 py-px text-[11px] font-medium">Compatible VIA</span>
-    }
-    @if (keyboard().lampArray) {
-      <span class="rounded-full border border-line px-2 py-px text-[11px] font-medium">Éclairage dynamique</span>
-    }
-  </div>
+    </div>
+  }
 
   @if (keyboard().via) {
     @if (via(); as info) {
-      <dl class="m-0 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-xs">
-        <dt class="text-muted">Protocole VIA</dt>
-        <dd class="m-0 tabular-nums">v{{ info.protocolVersion }}</dd>
-        <dt class="text-muted">Couches de touches</dt>
-        <dd class="m-0 tabular-nums">{{ info.layerCount ?? 'non lu' }}</dd>
-        <dt class="text-muted">Firmware</dt>
-        <dd class="m-0 tabular-nums">{{ firmware() }}</dd>
-        <dt class="text-muted">Éclairage détecté</dt>
-        <dd class="m-0">{{ lighting() || 'aucun éclairage VIA vu (il peut en avoir un autre type)' }}</dd>
-      </dl>
       @if (info.lighting.length) {
         <kf-via-lighting [keyboardId]="keyboard().id" [kinds]="info.lighting" />
+      } @else {
+        <p class="m-0 text-xs text-muted">Pas d'éclairage réglable trouvé sur ce clavier.</p>
       }
     } @else if (via() === null) {
-      <p class="m-0 text-xs text-muted">Ce clavier n'a pas répondu comme un clavier VIA.</p>
+      <p class="m-0 text-xs text-muted">Ce clavier n'a pas répondu comme prévu.</p>
     } @else {
       <div>
         <kf-button variant="ghost" [small]="true" [disabled]="service.viaBusy()" (pressed)="service.readVia(keyboard().id)">
-          Lire les infos VIA
+          Lire le clavier
         </kf-button>
       </div>
     }
-    <p class="m-0 text-xs text-muted">
-      Keyface ne change ici que l'éclairage, jamais les touches. Les écrans et le reste demandent une fiche de modèle.
-    </p>
   } @else if (keyboard().lampArray && keyboard().model === null) {
-    <p class="m-0 text-xs text-muted">
-      <b>Lecture seule :</b> ce clavier annonce le standard ouvert « Éclairage dynamique » (HID LampArray). Keyface le
-      détecte mais ne lui envoie rien pour l'instant. Pour le piloter, il faut d'abord une fiche de son modèle.
-    </p>
+    <p class="m-0 text-xs text-muted">Clavier détecté, mais Keyface ne sait pas encore le piloter.</p>
   } @else if (keyboard().model === null) {
-    <p class="m-0 text-xs text-muted">
-      Modèle non reconnu : l'envoi est désactivé, pour ne rien risquer sur un clavier que ce projet ne connaît pas.
-      Copie le diagnostic (zone « Avancé ») dans un ticket GitHub pour qu'on l'ajoute.
-    </p>
+    <p class="m-0 text-xs text-muted">Pas encore pris en charge : rien n'est envoyé, pour ne rien abîmer.</p>
   } @else if (!keyboard().ready) {
     <p class="m-0 text-xs text-muted">
-      Il manque une partie du clavier. Branche-le avec le câble USB, interrupteur en mode filaire, puis clique sur
-      « Reconnecter » et sélectionne <b>toutes</b> ses entrées dans la fenêtre.
+      Il manque une partie du clavier. Branche-le en USB (mode filaire), clique sur « Ajouter ou reconnecter » et
+      coche <b>toutes</b> ses entrées.
     </p>
+  }
+
+  @if (view.showDetails()) {
+    <div class="grid gap-1.5 border-t border-line pt-2">
+      <span class="text-xs text-muted tabular-nums">id {{ keyboard().id }}</span>
+      @if (via(); as info) {
+        <dl class="m-0 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-xs">
+          <dt class="text-muted">Protocole VIA</dt>
+          <dd class="m-0 tabular-nums">v{{ info.protocolVersion }}</dd>
+          <dt class="text-muted">Couches de touches</dt>
+          <dd class="m-0 tabular-nums">{{ info.layerCount ?? 'non lu' }}</dd>
+          <dt class="text-muted">Firmware</dt>
+          <dd class="m-0 tabular-nums">{{ firmware() }}</dd>
+          <dt class="text-muted">Éclairage détecté</dt>
+          <dd class="m-0">{{ lighting() || 'aucun éclairage VIA vu (il peut en avoir un autre type)' }}</dd>
+        </dl>
+      }
+      @if (keyboard().via) {
+        <p class="m-0 text-xs text-muted">
+          Keyface ne change ici que l'éclairage, jamais les touches. Les écrans et le reste demandent une fiche de modèle.
+        </p>
+      } @else if (keyboard().lampArray && keyboard().model === null) {
+        <p class="m-0 text-xs text-muted">
+          Ce clavier annonce le standard « Éclairage dynamique » (HID LampArray). Il est seulement détecté : rien ne lui
+          est envoyé.
+        </p>
+      } @else if (keyboard().model === null) {
+        <p class="m-0 text-xs text-muted">
+          Modèle non reconnu. Copie le diagnostic (zone « Avancé ») dans un ticket GitHub pour qu'on l'ajoute.
+        </p>
+      }
+    </div>
   }
 </div>

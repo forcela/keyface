@@ -80,39 +80,22 @@ export class KeyboardService {
     });
     if (!this.hid) return;
     // Keyboards the user already allowed on an earlier visit show up without a prompt.
-    void this.refresh();
+    void this.refresh().then(() => this.readVia());
     this.hid.addEventListener('connect', () => void this.refresh());
     this.hid.addEventListener('disconnect', () => void this.refresh());
   }
 
-  /** Opens the browser's device chooser. Must be called from a click. */
+  /**
+   * Opens the browser's device chooser for every kind of keyboard Keyface knows (the AK820 Pro, VIA
+   * keyboards, HID LampArray), then reads what the VIA ones report (reads only). Must be called from a click.
+   */
   async connect(): Promise<void> {
-    if (!this.hid) return;
+    if (!this.hid || this.busy()) return;
     try {
       await this.hid.requestDevice({
         filters: [
           { vendorId: SONIX_VENDOR_ID, usagePage: USAGE_PAGE_CONTROL },
           { vendorId: SONIX_VENDOR_ID, usagePage: USAGE_PAGE_DATA },
-        ],
-      });
-      await this.refresh();
-      this.status.set(IDLE);
-    } catch (error) {
-      // Closing the chooser without a choice is not a failure.
-      if (error instanceof DOMException && error.name === 'NotFoundError') return;
-      this.status.set(failure(this.messageOf(error)));
-    }
-  }
-
-  /**
-   * Opens the browser's chooser for keyboards that speak an open protocol (VIA, or the HID LampArray
-   * lighting standard), then reads what the VIA ones report. Reads only, never writes.
-   */
-  async detectOpen(): Promise<void> {
-    if (!this.hid || this.busy() || this.viaBusy()) return;
-    try {
-      await this.hid.requestDevice({
-        filters: [
           { usagePage: VIA_USAGE_PAGE, usage: VIA_USAGE },
           { usagePage: LAMPARRAY_USAGE_PAGE, usage: LAMPARRAY_USAGE },
         ],
@@ -124,6 +107,7 @@ export class KeyboardService {
       return;
     }
     await this.refresh();
+    this.status.set(IDLE);
     await this.readVia();
   }
 
