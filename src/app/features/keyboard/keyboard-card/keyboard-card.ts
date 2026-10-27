@@ -3,13 +3,14 @@ import { DetectedKeyboard, hex } from '@core/device/keyboard-info';
 import { KeyboardService } from '@core/device/keyboard.service';
 import { LIGHTING_CHANNELS, LightingChannelId } from '@core/device/via/via-protocol';
 import { Button } from '@shared/ui/button/button';
+import { ViaLighting } from '../via-lighting/via-lighting';
 
 const LIGHTING_LABELS = Object.fromEntries(LIGHTING_CHANNELS.map((c) => [c.id, c.label])) as Record<LightingChannelId, string>;
 
 /** One detected keyboard: its name, what the page knows it can do, and, for VIA keyboards, what it reported. */
 @Component({
   selector: 'kf-keyboard-card',
-  imports: [Button],
+  imports: [Button, ViaLighting],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './keyboard-card.html',
 })

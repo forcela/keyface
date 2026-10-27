@@ -136,9 +136,14 @@ A saved style is JSON. Layers are drawn in order, the first one at the back. `x`
 
 Fields that are missing take their default. Unknown types and values are dropped, so a hand-edited file can not break the page.
 
-### VIA keyboards (read only)
+### VIA keyboards (backlight, experimental)
 
-**Détecter un autre clavier** also lists keyboards that announce the open HID LampArray lighting standard (Windows "Dynamic Lighting"); those are only detected, nothing is read from or sent to them. For VIA keyboards, it reads what a QMK/VIA keyboard (Keychron, many Akko and custom boards) announces: VIA protocol version, number of key layers, firmware version, and which lighting channels answer. It sends four kinds of "get" requests and **writes nothing**: the code refuses to build any other request, and a test pins that. Controlling a VIA keyboard (colours, keys) needs a profile for its model and is not done yet. Vial keyboards use a different command set and are not covered.
+**Détecter un autre clavier** finds QMK/VIA keyboards (Keychron, Lemokey, some Epomaker, custom boards) and keyboards that announce the open HID LampArray lighting standard (Windows "Dynamic Lighting"; only detected for now). For a VIA keyboard it reads the protocol version, key layers, firmware version and which lighting channels answer, then offers **brightness, colour, speed and effect number** controls.
+
+- **Experimental, never tried on a real VIA keyboard.** You must tick a consent box first.
+- **Apply** changes the lighting in the keyboard's RAM only: it goes back to normal when you unplug it. **Enregistrer sur le clavier** stores it in the keyboard's memory.
+- The only commands that can be sent are `set value` and `save` on the four standard lighting channels. The code refuses everything else (keys, macros, reset, bootloader, the keyboard-specific channel), and tests pin that.
+- Effect numbers depend on each keyboard's firmware, so effects have no names yet. Vial keyboards use a different command set and are not covered. Screens are not reachable through VIA.
 
 ### How other keyboards will be added
 
@@ -148,7 +153,10 @@ Each keyboard is described by a **profile** (`src/app/core/device/keyboard-profi
 
 The research behind this order (what is a real standard, what is not, what is verified) is in [docs/PLAN.md](docs/PLAN.md).
 
-- [ ] Drive VIA keyboards (lighting first), once a model has been verified on real hardware
+- [x] VIA backlight (experimental, untested on hardware)
+- [ ] Confirm VIA backlight on a real keyboard, then add named effects per model
+- [ ] HID LampArray backlight, Epomaker and Keychron models, then Logitech and Wooting
+- [ ] Screens on other keyboards: each one needs its own driver and a real-hardware observation
 - [ ] Standby timer and per-key colours from the page
 - [ ] English interface
 - [ ] Other screen sizes and other keyboards with a TFT screen

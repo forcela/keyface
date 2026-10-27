@@ -74,7 +74,7 @@ remet l'état d'avant. La sauvegarde en mémoire n'a lieu que sur un clic « Enr
 | # | Marque / famille | Voie | Difficulté | Décision |
 | --- | --- | --- | --- | --- |
 | 0 | Ajazz AK820 Pro | pilote Sonix-AK | fait (bêta) | Attend le clavier pour valider. |
-| 1 | **Keychron, Lemokey** | VIA (firmware QMK) | facile | **Prochaine étape.** Réglage direct des canaux 1/2/3/5 + enregistrer sur clic. Effets : liste générique QMK, à confirmer par modèle. |
+| 1 | **Keychron, Lemokey** | VIA (firmware QMK) | facile | **Phase 1 faite (expérimental, jamais testé sur un vrai clavier).** Réglage direct des canaux 1/2/3/5 + enregistrer sur clic. Effets : numéros bruts, à nommer par modèle quand un clavier aura été vu. |
 | 2 | **Epomaker** | VIA sur certains modèles (non vérifié) ; Sonix-AK sur l'AK820 ; le reste est propriétaire (hub.epomaker.com) | facile à moyen | Les modèles VIA passent par la voie 1. Les autres : on relève leurs interfaces (diagnostic) avant tout. |
 | 3 | **Acer, ASUS (ROG), HP/HyperX, Razer (modèles LampArray)** | LampArray (standard) | moyen | Un seul pilote, générique : lire le descripteur de rapports, jamais d'identifiants en dur. Windows requis côté firmware ; modèles précis non vérifiés. |
 | 4 | Akko, MonsGeek | propriétaire fermé | difficile | **Sauté** pour l'instant. Piste : inspecter le bundle de leur driver web (aucun accès clavier nécessaire). |
@@ -97,6 +97,12 @@ Garde-fous communs à toute écriture sur un modèle pas encore vu en vrai :
    réelles. Tranche la question des deux familles.
 2. Tester l'heure, puis l'éclairage, puis l'écran (variante A, sinon B). Noter ce qui marche.
 3. Mettre à jour la fiche (`evidence: 'hardware'`) et retirer « non testé » seulement pour ce qui a marché.
+
+**Écrans (le petit afficheur)** : aucun standard ne dit « ce clavier a un écran » **[vérifié : non trouvé]**, et
+VIA ne sait pas envoyer d'image. Seul l'AK820 Pro a un pilote d'écran. Pour un autre clavier avec écran, il
+faut son pilote, propre à son protocole, écrit à partir d'une observation sur du vrai matériel (ou de l'inspection
+du driver web de la marque). Détection : l'écran n'est annoncé que par la fiche du modèle, jamais deviné.
+Chaque clavier à écran qu'on identifie rejoint le tableau ci-dessus avec sa ligne « écran ».
 
 **Autres chantiers** : sélecteur de plusieurs claviers, interface en anglais.
 

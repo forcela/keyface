@@ -9,7 +9,9 @@ import { LAMPARRAY_USAGE, LAMPARRAY_USAGE_PAGE, SONIX_VENDOR_ID, USAGE_PAGE_CONT
 import { AK820_PRO } from './keyboard-profiles';
 import { readBrowserSupport, unsupportedReason } from './browser-support';
 import { ViaInfo, readViaInfo } from './via/via-probe';
+import { ViaLightingRequest } from './via/via-lighting';
 import { VIA_USAGE, VIA_USAGE_PAGE } from './via/via-protocol';
+import { writeViaLighting } from './via/via-write';
 import { HidDevice, getHidApi } from './webhid.types';
 
 export type TransferState = 'idle' | 'working' | 'done' | 'error';
@@ -58,6 +60,8 @@ export class KeyboardService {
   /** What was read from VIA keyboards, by keyboard id. `null` means it was tried and did not answer like VIA. */
   readonly viaInfo = signal<Readonly<Record<string, ViaInfo | null>>>({});
   readonly viaBusy = signal(false);
+  /** Ticked by the user: "I understand VIA lighting is experimental on a model that is not confirmed". */
+  readonly viaConsent = signal(false);
 
   /** The write the user is being asked to confirm, or null. */
   readonly pending = signal<SendKind | null>(null);
@@ -141,6 +145,32 @@ export class KeyboardService {
   }
 
   /**
+   * Experimental: changes the lighting of a VIA keyboard that has no profile yet. Needs the user's
+   * consent (`viaConsent`), only sends the lighting writes of `via-lighting.ts`, and only stores them in
+   * the keyboard's memory when `save` is true; otherwise they last until it is unplugged.
+   */
+  async applyViaLighting(keyboardId: string, channel: number, request: ViaLightingRequest, save: boolean): Promise<void> {
+    if (this.busy() || !this.viaConsent()) return;
+    const device = this.devices().find(
+      (d) => deviceId(d) === keyboardId && d.collections.some((c) => c.usagePage === VIA_USAGE_PAGE && c.usage === VIA_USAGE),
+    );
+    if (!device) return void this.status.set(failure('Clavier VIA introuvable. Clique sur « Détecter un autre clavier ».'));
+    this.status.set({ state: 'working', message: 'Envoi de l’éclairage…', done: 0, total: 0 });
+    try {
+      const { sent, answered } = await writeViaLighting(device, channel, request, save);
+      this.status.set(
+        sent === 0
+          ? failure('Rien à envoyer pour ce type d’éclairage.')
+          : answered < sent
+            ? failure('Le clavier n’a pas répondu à tout : cet éclairage n’est peut-être pas réglable ainsi sur ce modèle.')
+            : { state: 'done', message: save ? 'Éclairage enregistré sur le clavier.' : 'Éclairage changé (temporaire : il revient au débranchement).', done: 0, total: 0 },
+      );
+    } catch (error) {
+      this.status.set(failure(this.messageOf(error)));
+    }
+  }
+
+  /**
    * One-click flow behind the send button: pick a keyboard if none is ready, then ask for
    * confirmation. Nothing is written until `confirmSend()`.
    */
@@ -161,7 +191,9 @@ export class KeyboardService {
     this.status.set(
       failure(
         (chosen.via || chosen.lampArray) && chosen.model === null
-          ? 'Clavier compatible VIA ou Éclairage dynamique : Keyface sait seulement le détecter pour l’instant, il ne peut pas encore le piloter.'
+          ? chosen.via
+            ? 'Clavier compatible VIA : règle son éclairage dans la zone « Ton clavier » (expérimental). L’écran et les images ne passent pas par ici.'
+            : 'Clavier « Éclairage dynamique » : Keyface le détecte mais ne sait pas encore le piloter.'
           : chosen.model === null
             ? 'Modèle non reconnu : l’envoi est désactivé pour ne rien risquer. Copie le diagnostic (zone « Avancé »).'
             : 'Il manque une partie du clavier. Branche-le en USB (mode filaire) et sélectionne toutes ses entrées.',

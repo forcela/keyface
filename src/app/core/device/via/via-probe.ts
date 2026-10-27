@@ -29,9 +29,17 @@ const REPORT_ID = 0;
 
 type InputReportEvent = Event & { data: DataView };
 
-/** Sends one read request and waits for the keyboard's 32-byte answer, or null after the timeout. */
-function ask(device: HidDevice, packet: Uint8Array, timeoutMs: number): Promise<Uint8Array | null> {
-  if (!isSafeRead(packet)) throw new Error('Refusé : ce n’est pas une requête de lecture connue.');
+/**
+ * Sends one packet and waits for the keyboard's 32-byte answer, or null after the timeout. `allowed` is
+ * the whitelist the packet must pass first: reads by default, lighting writes from `via-write.ts`.
+ */
+export function ask(
+  device: HidDevice,
+  packet: Uint8Array,
+  timeoutMs: number,
+  allowed: (packet: Uint8Array) => boolean = isSafeRead,
+): Promise<Uint8Array | null> {
+  if (!allowed(packet)) throw new Error('Refusé : ce n’est pas une requête connue et sûre.');
   return new Promise((resolve, reject) => {
     const finish = (reply: Uint8Array | null) => {
       clearTimeout(timer);

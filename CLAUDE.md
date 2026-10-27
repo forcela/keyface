@@ -75,7 +75,14 @@ ses réglages, donc :
 - **L'éclairage est un deuxième type d'écriture** (`applyLighting` : `0x18`, `0x13`, paquet de mode, `0x02`). Les
   numéros d'effets sont propres à un clavier (`keyboard-profiles.ts`), le `kind` d'un effet ne l'est pas
   (il pilote l'aperçu). L'aperçu est un dessin approximatif, jamais une promesse de rendu.
-- **VIA = lecture seule** (`core/device/via`). Seules 4 requêtes de lecture existent (version du protocole `0x01`,
+- **VIA : lecture + éclairage expérimental** (`core/device/via`). Écriture permise **seulement** par `via-lighting.ts` :
+  `set_value` (`0x07`) sur les canaux 1, 2, 3, 5 avec les valeurs luminosité / effet / vitesse / couleur que le canal
+  connaît, et `save` (`0x09`) sur un clic « Enregistrer ». Le réglage direct ne touche que la RAM du clavier (QMK
+  `_noeeprom`, vérifié dans `via.c`). `isSafeLightingWrite` refuse tout le reste (canal 0, audio, keymap, macros,
+  reset, bootloader) et `writeViaLighting` l'appelle avant chaque envoi ; `via-write.spec.ts` le fige. Case de
+  consentement « expérimental » obligatoire (`viaConsent`). **Jamais testé sur un vrai clavier VIA** : le dire.
+  Les numéros d'effets dépendent du firmware, aucun nom d'effet n'est promis. Pas d'écran via VIA.
+  Côté lecture : seules 4 requêtes de lecture existent (version du protocole `0x01`,
   nombre de couches `0x11`, version du firmware `0x02`/`0x04`, éclairage `0x08` sur les canaux 1, 2, 3 et 5 avec la
   valeur « luminosité »). `isSafeRead` refuse tout le reste et la sonde l'appelle avant chaque envoi ; ses tests
   nomment les commandes d'écriture (`0x03`, `0x05`, `0x06`, `0x07`, `0x09`, `0x0a`, `0x0b`, `0x0f`, `0x10`, `0x13`,

@@ -5,7 +5,7 @@
       class="rounded-full px-2 py-px text-[11px] font-semibold"
       [class]="keyboard().ready ? 'bg-ok/15 text-ok' : 'bg-accent/15 text-accent'"
     >
-      {{ keyboard().ready ? 'Prêt' : keyboard().model ? 'Incomplet' : 'Lecture seule' }}
+      {{ keyboard().ready ? 'Prêt' : keyboard().model ? 'Incomplet' : keyboard().via ? 'Éclairage expérimental' : 'Lecture seule' }}
     </span>
   </div>
   <span class="text-xs text-muted tabular-nums">id {{ keyboard().id }}</span>
@@ -41,6 +41,9 @@
         <dt class="text-muted">Éclairage détecté</dt>
         <dd class="m-0">{{ lighting() || 'aucun éclairage VIA vu (il peut en avoir un autre type)' }}</dd>
       </dl>
+      @if (info.lighting.length) {
+        <kf-via-lighting [keyboardId]="keyboard().id" [kinds]="info.lighting" />
+      }
     } @else if (via() === null) {
       <p class="m-0 text-xs text-muted">Ce clavier n'a pas répondu comme un clavier VIA.</p>
     } @else {
@@ -51,7 +54,7 @@
       </div>
     }
     <p class="m-0 text-xs text-muted">
-      <b>Lecture seule :</b> Keyface n'écrit rien sur ce clavier. Pour le piloter, il faut d'abord une fiche de son modèle.
+      Keyface ne change ici que l'éclairage, jamais les touches. Les écrans et le reste demandent une fiche de modèle.
     </p>
   } @else if (keyboard().lampArray && keyboard().model === null) {
     <p class="m-0 text-xs text-muted">
