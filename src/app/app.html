@@ -1,34 +1,37 @@
 <div class="mx-auto max-w-[1160px] px-[max(16px,env(safe-area-inset-left))] pt-8 pb-[72px]">
-  <header class="mb-6 flex flex-wrap items-end justify-between gap-x-8 gap-y-2.5">
+  <header class="mb-5 flex flex-wrap items-end justify-between gap-x-8 gap-y-2.5">
     <div>
       <h1 class="m-0 text-[clamp(26px,3.4vw,34px)] leading-[1.1] font-bold tracking-[-.025em] text-balance">
         Keyface<span class="text-accent">.</span>
       </h1>
       <p class="mt-1.5 mb-0 max-w-[58ch] text-[15px] text-muted">
-        Quatre styles prêts et un éditeur pour le petit écran de ton clavier (Ajazz / Epomaker AK820 Pro).
-        Règle, regarde l'aperçu, puis envoie-le directement à ton clavier.
+        Personnalise l'écran et l'éclairage de ton clavier (Ajazz / Epomaker AK820 Pro). Règle, regarde l'aperçu,
+        puis envoie directement à ton clavier.
       </p>
     </div>
-    <p class="m-0 flex flex-wrap gap-3.5 text-xs text-muted tabular-nums">
-      <span>Écran <b class="font-semibold text-fg">0,85"</b></span>
-      <span><b class="font-semibold text-fg">128 × 128</b> px</span>
-      <span>jusqu'à <b class="font-semibold text-fg">≈140</b> images</span>
-    </p>
+    @if (view.mode() === 'screen') {
+      <p class="m-0 flex flex-wrap gap-3.5 text-xs text-muted tabular-nums">
+        <span>Écran <b class="font-semibold text-fg">0,85"</b></span>
+        <span><b class="font-semibold text-fg">128 × 128</b> px</span>
+        <span>jusqu'à <b class="font-semibold text-fg">≈140</b> images</span>
+      </p>
+    }
   </header>
 
+  <kf-mode-tabs class="mb-5 block max-w-[320px]" />
+
   <main class="grid grid-cols-[minmax(0,1.25fr)_minmax(320px,1fr)] items-start gap-5 max-[900px]:grid-cols-1">
-    <kf-stage />
+    @if (view.mode() === 'screen') {
+      <kf-stage />
+    } @else {
+      <kf-lighting-stage />
+    }
     <div class="overflow-hidden rounded-[22px] border border-line bg-surface">
-      <kf-panel-section title="Style">
-        <kf-theme-picker />
-      </kf-panel-section>
-      @if (custom()) {
-        <kf-editor />
+      @if (view.mode() === 'screen') {
+        <kf-screen-settings />
       } @else {
-        <kf-theme-settings />
+        <kf-lighting-panel />
       }
-      <kf-info-settings />
-      <kf-export-settings />
       <kf-keyboard-panel />
     </div>
   </main>

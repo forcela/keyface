@@ -8,18 +8,16 @@
       <p class="m-0 text-base font-bold text-accent">Envoi impossible dans ce navigateur</p>
       <p class="m-0 text-sm font-medium">{{ keyboard.unsupported }}</p>
     </div>
-  } @else if (keyboard.confirming()) {
+  } @else if (keyboard.pending()) {
     <div class="grid gap-2.5" role="alertdialog" aria-label="Confirmer l'envoi">
-      <p class="m-0 text-sm">
-        L'animation va être écrite dans la mémoire du clavier. <b>Garde le câble branché</b> et ne ferme pas la
-        page. Seul l'écran est modifié : jamais les touches, la disposition ni l'éclairage.
-      </p>
+      <p class="m-0 text-sm">{{ confirmText() }}</p>
+      <kf-switch-field [label]="layoutLabel()" [(checked)]="keyboard.layoutConfirmed" />
       <p class="m-0 text-xs text-muted">
         <b>Bêta :</b> la séquence vient d'un projet confirmé sur un modèle ISO, mais cette page n'a pas encore été
         essayée sur un vrai clavier. L'ANSI n'est pas testé.
       </p>
       <div class="flex gap-2">
-        <kf-button (pressed)="keyboard.confirmSend()">Envoyer</kf-button>
+        <kf-button [disabled]="!keyboard.layoutConfirmed()" (pressed)="keyboard.confirmSend()">Envoyer</kf-button>
         <kf-button variant="ghost" (pressed)="keyboard.cancelConfirm()">Annuler</kf-button>
       </div>
     </div>
@@ -42,7 +40,7 @@
   } @else {
     <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2.5">
       <p class="m-0 min-w-0 flex-1 basis-60 text-sm">{{ hint() }}</p>
-      <kf-button (pressed)="keyboard.requestSend()">Envoyer à mon clavier</kf-button>
+      <kf-button (pressed)="keyboard.requestSend(kind())">{{ buttonLabel() }}</kf-button>
     </div>
   }
 

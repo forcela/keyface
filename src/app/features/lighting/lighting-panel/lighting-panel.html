@@ -1,0 +1,44 @@
+<kf-panel-section title="Ambiances">
+  <div class="flex flex-wrap gap-2">
+    @for (preset of presets; track preset.id) {
+      <kf-button variant="ghost" [small]="true" (pressed)="lighting.applyPreset(preset)">{{ preset.label }}</kf-button>
+    }
+  </div>
+</kf-panel-section>
+
+<kf-panel-section title="Effet">
+  <kf-effect-picker />
+</kf-panel-section>
+
+@if (!isOff()) {
+  <kf-panel-section title="Couleur">
+    <kf-color-picker [usesColor]="effect()?.usesColor ?? true" />
+  </kf-panel-section>
+
+  <kf-panel-section title="Réglages">
+    <kf-range-field
+      label="Luminosité"
+      [min]="0"
+      [max]="5"
+      [format]="levelLabel"
+      [value]="lighting.settings().brightness"
+      (valueChange)="lighting.patch({ brightness: $event })"
+    />
+    <kf-range-field
+      label="Vitesse"
+      [min]="0"
+      [max]="5"
+      [format]="speedLabel"
+      [value]="lighting.settings().speed"
+      (valueChange)="lighting.patch({ speed: $event })"
+    />
+    @if (effect()?.usesDirection) {
+      <kf-segmented-control
+        label="Direction"
+        [options]="directions"
+        [value]="lighting.settings().direction"
+        (valueChange)="lighting.patch({ direction: $event })"
+      />
+    }
+  </kf-panel-section>
+}

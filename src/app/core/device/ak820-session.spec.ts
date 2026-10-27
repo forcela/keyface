@@ -1,3 +1,4 @@
+import { DEFAULT_LIGHTING } from '@core/lighting/lighting.model';
 import { FRAME_BYTES, buildScreenPayload } from './ak820-protocol';
 import { Ak820Session, UploadCancelled } from './ak820-session';
 import { USAGE_PAGE_CONTROL, USAGE_PAGE_DATA } from './keyboard-info';
@@ -150,6 +151,23 @@ describe('Ak820Session', () => {
       await session.uploadScreen(twoFrames(), 'A', () => undefined);
       // Control packets are 64 bytes feature reports; image chunks are the only output reports.
       expect(log.filter(([kind]) => kind === 'report').every(([, length]) => length === 4096)).toBe(true);
+    });
+  });
+
+  describe('applyLighting', () => {
+    it('sends start, lighting config, the mode packet, then save, and nothing else', async () => {
+      const { log, session } = setup();
+      await session.applyLighting({ ...DEFAULT_LIGHTING, effect: 0x0f, color: '#9b5cff' });
+
+      const features = log.filter(([kind]) => kind === 'feature');
+      expect(features).toHaveLength(4);
+      expect(features[0].slice(1, 3)).toEqual([0x04, 0x18]);
+      expect(features[1].slice(1, 3)).toEqual([0x04, 0x13]);
+      expect(features[2][1]).toBe(0x0f); // the mode packet starts with the mode number
+      expect(features[2]).toHaveLength(5);
+      expect(features[3].slice(1, 3)).toEqual([0x04, 0x02]);
+      expect(log.some(([kind]) => kind === 'report')).toBe(false);
+      expect(log.at(-1)).toEqual(['close']);
     });
   });
 

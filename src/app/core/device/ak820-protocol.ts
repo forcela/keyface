@@ -17,6 +17,7 @@ export const MAX_SCREEN_FRAMES = HEADER_BYTES - 1;
 /** Command bytes (second byte of a 64-byte packet). */
 export const Command = {
   Save: 0x02,
+  LightingConfig: 0x13,
   Start: 0x18,
   ClockConfig: 0x28,
   ImageConfig: 0x72,

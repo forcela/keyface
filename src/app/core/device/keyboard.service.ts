@@ -1,20 +1,18 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal, untracked } from '@angular/core';
 import { FrameSequence } from '@core/rendering/frame-sequence';
+import { LightingStore } from '@core/state/lighting.store';
 import { StudioStore } from '@core/state/studio.store';
+import { ViewStore } from '@core/state/view.store';
 import { UploadVariant, buildScreenPayload, toRgb565, ScreenFrame, SCREEN_WIDTH } from './ak820-protocol';
 import { Ak820Session, UploadCancelled } from './ak820-session';
+import { SONIX_VENDOR_ID, USAGE_PAGE_CONTROL, USAGE_PAGE_DATA, deviceId, diagnosticText, groupKeyboards } from './keyboard-info';
+import { AK820_PRO } from './keyboard-profiles';
 import { readBrowserSupport, unsupportedReason } from './browser-support';
-import {
-  SONIX_VENDOR_ID,
-  USAGE_PAGE_CONTROL,
-  USAGE_PAGE_DATA,
-  deviceId,
-  diagnosticText,
-  groupKeyboards,
-} from './keyboard-info';
 import { HidDevice, getHidApi } from './webhid.types';
 
 export type TransferState = 'idle' | 'working' | 'done' | 'error';
+/** What the user is about to write to the keyboard. */
+export type SendKind = 'screen' | 'lighting';
 
 export interface TransferStatus {
   state: TransferState;
@@ -24,16 +22,20 @@ export interface TransferStatus {
 }
 
 const IDLE: TransferStatus = { state: 'idle', message: '', done: 0, total: 0 };
+const failure = (message: string): TransferStatus => ({ state: 'error', message, done: 0, total: 0 });
 
 /**
- * Finds keyboards through WebHID (Chrome and Edge) and sends them the screen animation and the
- * time. It only ever sends the sequences in `ak820-session.ts`, and only on a user's click.
+ * Finds keyboards through WebHID (Chrome and Edge) and writes to them: the screen animation, the
+ * backlight and the clock. It only ever sends the sequences in `ak820-session.ts`, only to a keyboard
+ * that has a profile, only after an explicit confirmation, and only on a user's click.
  */
 @Injectable({ providedIn: 'root' })
 export class KeyboardService {
   private readonly hid = getHidApi();
   private readonly sequence = inject(FrameSequence);
   private readonly studio = inject(StudioStore);
+  private readonly lighting = inject(LightingStore);
+  private readonly view = inject(ViewStore);
   private readonly devices = signal<HidDevice[]>([]);
   private cancel: AbortController | null = null;
 
@@ -45,12 +47,27 @@ export class KeyboardService {
   readonly status = signal<TransferStatus>(IDLE);
   readonly variant = signal<UploadVariant>('A');
   readonly busy = computed(() => this.status().state === 'working');
+
   /** The first keyboard that is safe to write to, or null. */
   readonly readyKeyboard = computed(() => this.keyboards().find((keyboard) => keyboard.ready) ?? null);
-  /** True while the user is asked to confirm a send. */
-  readonly confirming = signal(false);
+  /** What the page shows features for: the connected model, or the AK820 Pro until one is connected. */
+  readonly profile = computed(() => this.readyKeyboard()?.profile ?? AK820_PRO);
+
+  /** The write the user is being asked to confirm, or null. */
+  readonly pending = signal<SendKind | null>(null);
+  /** Ticked by the user: "my keyboard is the model and layout this was confirmed on". Reset each time. */
+  readonly layoutConfirmed = signal(false);
 
   constructor() {
+    // A result or a pending confirmation belongs to the tab it was started in.
+    effect(() => {
+      this.view.mode();
+      untracked(() => {
+        if (this.busy()) return;
+        this.status.set(IDLE);
+        this.pending.set(null);
+      });
+    });
     if (!this.hid) return;
     // Keyboards the user already allowed on an earlier visit show up without a prompt.
     void this.refresh();
@@ -73,53 +90,51 @@ export class KeyboardService {
     } catch (error) {
       // Closing the chooser without a choice is not a failure.
       if (error instanceof DOMException && error.name === 'NotFoundError') return;
-      this.fail(error);
+      this.status.set(failure(this.messageOf(error)));
     }
   }
 
   /**
-   * One-click flow behind the "send" button: pick a keyboard if none is ready, then ask for
+   * One-click flow behind the send button: pick a keyboard if none is ready, then ask for
    * confirmation. Nothing is written until `confirmSend()`.
    */
-  async requestSend(): Promise<void> {
+  async requestSend(kind: SendKind): Promise<void> {
     if (this.busy()) return;
     if (!this.readyKeyboard()) await this.connect();
-    if (this.readyKeyboard()) {
+    const ready = this.readyKeyboard();
+    if (ready) {
+      const missing = this.missingCapability(kind);
+      if (missing) return void this.status.set(failure(missing));
       this.status.set(IDLE);
-      this.confirming.set(true);
+      this.layoutConfirmed.set(false);
+      this.pending.set(kind);
       return;
     }
     const chosen = this.keyboards()[0];
     if (!chosen) return; // The chooser was closed without a choice.
-    this.status.set({
-      state: 'error',
-      message: chosen.model === null
-        ? 'Modèle non reconnu : l’envoi est désactivé pour ne rien risquer. Copie le diagnostic (zone « Avancé »).'
-        : 'Il manque une partie du clavier. Branche-le en USB (mode filaire) et sélectionne toutes ses entrées.',
-      done: 0,
-      total: 0,
-    });
+    this.status.set(
+      failure(
+        chosen.model === null
+          ? 'Modèle non reconnu : l’envoi est désactivé pour ne rien risquer. Copie le diagnostic (zone « Avancé »).'
+          : 'Il manque une partie du clavier. Branche-le en USB (mode filaire) et sélectionne toutes ses entrées.',
+      ),
+    );
   }
 
   async confirmSend(): Promise<void> {
-    this.confirming.set(false);
-    await this.sendAnimation();
+    const kind = this.pending();
+    if (!kind || !this.layoutConfirmed()) return;
+    this.pending.set(null);
+    if (kind === 'screen') await this.sendAnimation();
+    else await this.applyLighting();
   }
 
   cancelConfirm(): void {
-    this.confirming.set(false);
+    this.pending.set(null);
   }
 
-  /** Sends the current style to the keyboard's screen. */
-  async sendAnimation(): Promise<void> {
-    await this.run('Envoi à l’écran', async (session, signal) => {
-      const frames = await this.renderFrames();
-      const payload = buildScreenPayload(frames);
-      this.status.set({ state: 'working', message: 'Envoi à l’écran…', done: 0, total: payload.chunks });
-      await session.uploadScreen(payload, this.variant(), (done, total) =>
-        this.status.set({ state: 'working', message: 'Envoi à l’écran…', done, total }), signal);
-      return 'Animation envoyée. Si l’écran ne change pas, débranche puis rebranche le câble.';
-    });
+  cancelTransfer(): void {
+    this.cancel?.abort();
   }
 
   async syncClock(): Promise<void> {
@@ -129,8 +144,30 @@ export class KeyboardService {
     });
   }
 
-  cancelTransfer(): void {
-    this.cancel?.abort();
+  private async sendAnimation(): Promise<void> {
+    await this.run('Envoi à l’écran', async (session, signal) => {
+      const payload = buildScreenPayload(await this.renderFrames());
+      const report = (done: number, total: number) =>
+        this.status.set({ state: 'working', message: 'Envoi à l’écran…', done, total });
+      report(0, payload.chunks);
+      await session.uploadScreen(payload, this.variant(), report, signal);
+      return 'Animation envoyée. Si l’écran ne change pas, débranche puis rebranche le câble.';
+    });
+  }
+
+  private async applyLighting(): Promise<void> {
+    await this.run('Envoi de l’éclairage', async (session) => {
+      await session.applyLighting(this.lighting.settings());
+      return 'Éclairage envoyé au clavier. Si rien ne change, débranche puis rebranche le câble.';
+    });
+  }
+
+  /** Explains why this keyboard cannot do `kind`, or null when it can. */
+  private missingCapability(kind: SendKind): string | null {
+    const { capabilities, name } = this.profile();
+    if (kind === 'screen' && !capabilities.screen) return `${name} n’a pas d’écran.`;
+    if (kind === 'lighting' && !capabilities.backlight) return `${name} n’a pas de rétroéclairage réglable ici.`;
+    return null;
   }
 
   private async run(
@@ -146,11 +183,13 @@ export class KeyboardService {
     try {
       this.status.set({ state: 'done', message: await task(session, this.cancel.signal), done: 0, total: 0 });
     } catch (error) {
-      if (error instanceof UploadCancelled) {
-        this.status.set({ state: 'error', message: 'Envoi annulé. L’écran peut rester vide jusqu’au prochain envoi.', done: 0, total: 0 });
-      } else {
-        this.fail(error);
-      }
+      this.status.set(
+        failure(
+          error instanceof UploadCancelled
+            ? 'Envoi annulé. L’écran peut rester vide jusqu’au prochain envoi.'
+            : this.messageOf(error),
+        ),
+      );
     } finally {
       this.cancel = null;
     }
@@ -166,9 +205,8 @@ export class KeyboardService {
     return frames;
   }
 
-  private fail(error: unknown): void {
-    const message = error instanceof Error ? error.message : 'Échec de la communication avec le clavier.';
-    this.status.set({ state: 'error', message, done: 0, total: 0 });
+  private messageOf(error: unknown): string {
+    return error instanceof Error ? error.message : 'Échec de la communication avec le clavier.';
   }
 
   private async refresh(): Promise<void> {

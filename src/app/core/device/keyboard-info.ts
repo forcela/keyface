@@ -1,3 +1,4 @@
+import { KeyboardProfile, findProfile } from './keyboard-profiles';
 import { HidCollectionInfo, HidDeviceLike } from './webhid.types';
 
 /** Pure description of what the browser reports about a connected HID device. No WebHID calls here. */
@@ -18,7 +19,9 @@ export interface DetectedKeyboard {
   productId: number;
   /** Every HID interface the keyboard exposes, merged and sorted. */
   collections: HidCollectionInfo[];
-  /** Model recognised from `KNOWN_MODELS`, or null. */
+  /** The profile this keyboard matches, or null when the model is not known. */
+  profile: KeyboardProfile | null;
+  /** Display name of the recognised model, or null. */
   model: string | null;
   /**
    * Safe to write to: a model this project knows AND both vendor interfaces visible. An unknown
@@ -26,12 +29,6 @@ export interface DetectedKeyboard {
    */
   ready: boolean;
 }
-
-/** Ids reported by community projects. They are observations, not an official list. */
-const KNOWN_MODELS: Readonly<Record<string, string>> = {
-  '0c45:8009': 'Ajazz AK820 Pro (USB)',
-  '0c45:800a': 'Ajazz AK820 Pro (USB, variante)',
-};
 
 export const hex = (value: number, width = 4): string => value.toString(16).padStart(width, '0');
 
@@ -49,13 +46,15 @@ export function groupKeyboards(devices: readonly HidDeviceLike[]): DetectedKeybo
   const byId = new Map<string, DetectedKeyboard>();
   for (const device of devices) {
     const id = deviceId(device);
+    const profile = findProfile(id);
     const entry = byId.get(id) ?? {
       id,
       name: device.productName || 'Clavier',
       vendorId: device.vendorId,
       productId: device.productId,
       collections: [],
-      model: KNOWN_MODELS[id] ?? null,
+      profile,
+      model: profile?.name ?? null,
       ready: false,
     };
     for (const { usagePage, usage } of device.collections) {

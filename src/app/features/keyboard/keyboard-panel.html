@@ -15,6 +15,18 @@
           </span>
         </div>
         <span class="text-xs text-muted tabular-nums">id {{ kb.id }}</span>
+        @if (kb.profile; as profile) {
+          <div class="flex flex-wrap gap-1.5">
+            @if (profile.capabilities.backlight) {
+              <span class="rounded-full border border-line px-2 py-px text-[11px] font-medium">Rétroéclairage</span>
+            }
+            @if (profile.capabilities.screen; as screen) {
+              <span class="rounded-full border border-line px-2 py-px text-[11px] font-medium tabular-nums">
+                Écran {{ screen.width }} × {{ screen.height }}
+              </span>
+            }
+          </div>
+        }
         @if (kb.model === null) {
           <p class="m-0 text-xs text-muted">
             Modèle non reconnu : l'envoi est désactivé, pour ne rien risquer sur un clavier que ce projet ne

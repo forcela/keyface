@@ -8,6 +8,8 @@ import {
   imageConfigPacket,
   splitChunks,
 } from './ak820-protocol';
+import { LightingSettings } from '@core/lighting/lighting.model';
+import { lightingPacket } from './ak820-lighting';
 import { USAGE_PAGE_CONTROL, USAGE_PAGE_DATA, hasUsagePage } from './keyboard-info';
 import { HidDevice } from './webhid.types';
 
@@ -67,6 +69,17 @@ export class Ak820Session {
         onProgress(index + 1, chunks.length);
       }
       await this.command(commandPacket(end.command, 0, end.enable));
+    });
+  }
+
+  /** Start, announce a lighting change, send the mode packet, then save. */
+  async applyLighting(settings: LightingSettings): Promise<void> {
+    await this.withOpenDevices(async () => {
+      await this.command(commandPacket(Command.Start, 0, 1));
+      await this.command(commandPacket(Command.LightingConfig, 0, 1));
+      await this.control.sendFeatureReport(REPORT_ID, lightingPacket(settings) as BufferSource);
+      await sleep(this.timing.pauseMs);
+      await this.command(commandPacket(Command.Save, 0, 0));
     });
   }
 

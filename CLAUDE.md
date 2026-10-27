@@ -69,6 +69,15 @@ ses réglages, donc :
 - Les identifiants USB sont identiques pour toutes les dispositions : on ne peut pas distinguer ISO d'ANSI.
   Le protocole d'envoi a été confirmé par le projet de référence (kabelklaus, MIT) sur un ISO-DE ; les ANSI
   ne sont pas testés. Ne jamais écrire qu'ils sont compatibles.
+- **Avant toute écriture, l'utilisateur coche « mon clavier est bien un AK820 Pro ISO (pas ANSI) »** : le bouton
+  « Envoyer » reste bloqué sinon. Les identifiants USB ne distinguent pas ISO d'ANSI, donc la page ne peut pas le
+  vérifier elle-même. Ne jamais pré-cocher.
+- **L'éclairage est un deuxième type d'écriture** (`applyLighting` : `0x18`, `0x13`, paquet de mode, `0x02`). Les
+  numéros d'effets sont propres à un clavier (`keyboard-profiles.ts`), le `kind` d'un effet ne l'est pas
+  (il pilote l'aperçu). L'aperçu est un dessin approximatif, jamais une promesse de rendu.
+- **Un clavier = une fiche** (`KeyboardProfile`) : identifiants USB, capacités (rétroéclairage, écran), niveau de
+  preuve, dispositions confirmées. Ajouter un modèle = une fiche (+ un pilote si le protocole diffère), avec des
+  observations sur du vrai matériel. Pas de fiche = jamais d'écriture.
 - Un envoi s'ouvre sur une confirmation explicite, se déclenche sur un clic, et ferme toujours les
   interfaces (même après une erreur ou une annulation).
 - Les sources communautaires se contredisent sur trois octets (variantes A et B). Tant qu'une variante

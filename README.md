@@ -4,7 +4,7 @@
 
 **Make the tiny screen on your mechanical keyboard look good.**
 
-Ready-made animated styles and a drag-and-drop layer editor for the 128 × 128 TFT screen of the **Ajazz / Epomaker AK820 Pro**. Runs in the browser. Free and open source.
+Customise the **screen** and the **backlight** of your mechanical keyboard: ready-made animated styles, a drag-and-drop layer editor, 20 lighting effects with a live preview, and direct sending from the browser. Built for the **Ajazz / Epomaker AK820 Pro**, designed to grow to other keyboards. Free and open source.
 
 [![CI](https://github.com/forcela/keyface/actions/workflows/pages.yml/badge.svg)](https://github.com/forcela/keyface/actions/workflows/pages.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -13,7 +13,8 @@ Ready-made animated styles and a drag-and-drop layer editor for the 128 × 128 T
 
 [English](#english) · [Français](#français)
 
-![Keyface](docs/screenshot.jpg)
+<img src="docs/screenshot-screen.jpg" alt="Keyface, Écran tab: live preview of the keyboard screen and its settings" width="49%">
+<img src="docs/screenshot-lighting.jpg" alt="Keyface, Éclairage tab: 20 lighting effects with animated previews" width="49%">
 
 </div>
 
@@ -36,6 +37,7 @@ The AK820 Pro ships with a small 0.85" color screen (128 × 128 px) and a stock 
   - Per-layer settings: font, weight, size, color, soft shadow, opacity, battery style (pill, icon, ring, bar), corner radius, outline.
   - Per-layer animation that loops seamlessly: float, pulse, blink, sway, spin.
   - Start from a template (and undo it), auto-save in the browser, save and open styles as `.json`.
+- **Backlight**: pick one of the 20 effects on animated cards (with a live preview on a drawing of the keyboard), a mood, a colour or rainbow, brightness, speed and direction, then apply it.
 - **Send straight to your keyboard** from the page (Chrome or Edge, USB cable): connect it, click send, done. Also sets the keyboard's clock.
 - **Export** every frame as a PNG in a `.zip`, ready for the official tool.
 - Nothing to install, no account, no tracking. Everything runs locally in your browser.
@@ -134,9 +136,13 @@ A saved style is JSON. Layers are drawn in order, the first one at the back. `x`
 
 Fields that are missing take their default. Unknown types and values are dropped, so a hand-edited file can not break the page.
 
+### How other keyboards will be added
+
+Each keyboard is described by a **profile** (`src/app/core/device/keyboard-profiles.ts`): its USB ids, what it can do (backlight with its effects, screen with its size) and how well that is established. The page recognises a connected keyboard from its profile and only shows what it can do. **A keyboard with no profile is never written to.** A keyboard family that speaks a different protocol needs its own driver next to `ak820-session.ts`. A keyboard cannot report "I have RGB" or "I have a screen" over USB, so models have to be added one by one, from observations on real hardware.
+
 ### Roadmap
 
-- [ ] Lighting and standby settings from the page
+- [ ] Standby timer and per-key colours from the page
 - [ ] English interface
 - [ ] Other screen sizes and other keyboards with a TFT screen
 - [ ] Animated GIF export
