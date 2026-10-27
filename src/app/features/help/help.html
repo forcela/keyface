@@ -1,6 +1,10 @@
 <div class="mt-10 grid grid-cols-[1.2fr_1fr] gap-8 max-[900px]:grid-cols-1">
   <section>
-    <h2 class="mt-0 mb-3 text-lg font-bold tracking-tight">Mettre l'animation sur le clavier</h2>
+    <h2 class="mt-0 mb-3 text-lg font-bold tracking-tight">Sans envoi direct : l'outil officiel</h2>
+    <p class="mt-0 mb-3 max-w-[64ch]">
+      Le bouton <a class="font-bold underline underline-offset-[3px]" href="#envoyer">Envoyer à mon clavier</a>, en haut de la page sous l'aperçu, fait tout seul (Chrome ou Edge). Si ton navigateur ne
+      le permet pas, ou si ton modèle n'est pas reconnu, exporte les images et passe par l'outil officiel :
+    </p>
     <ol class="m-0 grid max-w-[64ch] list-none gap-2.5 p-0">
       @for (step of steps; track $index) {
         <li class="grid grid-cols-[26px_1fr] items-start gap-2.5">
@@ -15,9 +19,12 @@
       }
     </ol>
     <p class="mt-3 mb-0 text-xs text-muted">
-      Pilote officiel :
-      <a class="underline underline-offset-[3px]" [href]="driverUrl" target="_blank" rel="noopener">Epomaker</a>
+      Outils officiels Epomaker :
+      @for (tool of tools; track tool.url; let last = $last) {
+        <a class="underline underline-offset-[3px]" [href]="tool.url" target="_blank" rel="noopener">{{ tool.label }}</a>{{ last ? '' : ' · ' }}
+      }
     </p>
+    <p class="mt-1.5 mb-0 text-xs text-muted">{{ disclaimer }}</p>
   </section>
 
   <section>

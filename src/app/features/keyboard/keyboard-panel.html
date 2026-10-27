@@ -1,0 +1,47 @@
+<ss-panel-section title="Ton clavier">
+  @if (!keyboard.supported) {
+    <p class="m-0 text-[13px]">{{ keyboard.unsupported }}</p>
+    <p class="m-0 text-xs text-muted">Tu peux quand même exporter les images (section Animation).</p>
+  } @else {
+    @for (kb of keyboard.keyboards(); track kb.id) {
+      <div class="grid gap-1 rounded-xl border border-line bg-sunk p-3">
+        <div class="flex items-center justify-between gap-2">
+          <b class="text-[13px] font-semibold">{{ kb.model ?? kb.name }}</b>
+          <span
+            class="rounded-full px-2 py-px text-[11px] font-semibold"
+            [class]="kb.ready ? 'bg-ok/15 text-ok' : 'bg-accent/15 text-accent'"
+          >
+            {{ kb.ready ? 'Prêt' : 'Incomplet' }}
+          </span>
+        </div>
+        <span class="text-xs text-muted tabular-nums">id {{ kb.id }}</span>
+        @if (kb.model === null) {
+          <p class="m-0 text-xs text-muted">
+            Modèle non reconnu : l'envoi est désactivé, pour ne rien risquer sur un clavier que ce projet ne
+            connaît pas. Copie le diagnostic (zone « Avancé ») dans un ticket GitHub pour qu'on l'ajoute.
+          </p>
+        } @else if (!kb.ready) {
+          <p class="m-0 text-xs text-muted">
+            Il manque une partie du clavier. Branche-le avec le câble USB, interrupteur en mode filaire, puis
+            clique sur « Reconnecter » et sélectionne <b>toutes</b> ses entrées dans la fenêtre.
+          </p>
+        }
+      </div>
+    } @empty {
+      <p class="m-0 text-xs text-muted">
+        Aucun clavier connecté. Le bouton « Envoyer à mon clavier », sous l'aperçu, s'en occupe en un clic.
+      </p>
+    }
+
+    <div class="flex flex-wrap gap-2">
+      <ss-button variant="ghost" [small]="true" [disabled]="keyboard.busy()" (pressed)="keyboard.connect()">
+        {{ keyboard.keyboards().length ? 'Reconnecter' : 'Connecter sans envoyer' }}
+      </ss-button>
+      @if (keyboard.readyKeyboard() && !keyboard.busy()) {
+        <ss-button variant="ghost" [small]="true" (pressed)="keyboard.syncClock()">Régler l'heure du clavier</ss-button>
+      }
+    </div>
+
+    <ss-keyboard-advanced />
+  }
+</ss-panel-section>

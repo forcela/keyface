@@ -55,6 +55,27 @@ Incident réel (prototype) : un pourcentage de batterie dépassait de sa tuile p
 - Le projet est indépendant : ne pas laisser penser qu'il est affilié à Ajazz ou Epomaker.
 - Toute affirmation de l'UI ou du README se vérifie. Pas de « compatible avec… » non testé.
 
+## 3bis. Écrire dans un vrai clavier : règles de sécurité
+
+L'envoi (`core/device`) écrit dans la mémoire d'un appareil de l'utilisateur. Un octet faux peut abîmer
+ses réglages, donc :
+
+- **Seules les commandes de `ak820-protocol.ts` sont envoyées** (écran et heure : `0x18`, `0x72`, `0x02`,
+  `0xf0`, `0x28`). Jamais de touches, de disposition ni d'éclairage, jamais de commande « pour voir ».
+  Ne pas ajouter de scanner de commandes ni d'envoi d'octets bruts. Le test `safety` de
+  `ak820-session.spec.ts` le vérifie : l'étendre avant d'ajouter une commande, pas après.
+- **Un clavier non reconnu n'est jamais écrit** (`ready` exige un modèle connu), même s'il expose les
+  mêmes interfaces. Ajouter un modèle = un identifiant observé sur du vrai matériel, pas une supposition.
+- Les identifiants USB sont identiques pour toutes les dispositions : on ne peut pas distinguer ISO d'ANSI.
+  Le protocole d'envoi a été confirmé par le projet de référence (kabelklaus, MIT) sur un ISO-DE ; les ANSI
+  ne sont pas testés. Ne jamais écrire qu'ils sont compatibles.
+- Un envoi s'ouvre sur une confirmation explicite, se déclenche sur un clic, et ferme toujours les
+  interfaces (même après une erreur ou une annulation).
+- Les sources communautaires se contredisent sur trois octets (variantes A et B). Tant qu'une variante
+  n'est pas prouvée sur du matériel, les deux restent proposées.
+- **Rien de ceci ne se vérifie sans clavier** : les tests utilisent un faux appareil. Écrire « non testé
+  sur un vrai clavier » tant que ce n'est pas le cas.
+
 ## 4. Conventions Angular (lint-enforced — `pnpm lint` doit rester vert)
 
 - `ChangeDetectionStrategy.OnPush` explicite sur **tout** composant. Sélecteur `ss-`.
@@ -100,6 +121,8 @@ Incident réel (prototype) : un pourcentage de batterie dépassait de sa tuile p
 ## 7. Known gaps
 
 - L'interface est en français uniquement (pas d'i18n).
-- `ExportService`, `decode-image`, `AnimationClock` et `FrameRenderer` n'ont pas de test dédié (ils
-  dépendent du canvas ou de `requestAnimationFrame`) : à vérifier dans le navigateur.
+- `ExportService`, `KeyboardService`, `decode-image`, `AnimationClock` et `FrameRenderer` n'ont pas de
+  test dédié (ils dépendent du canvas, de WebHID ou de `requestAnimationFrame`) : à vérifier dans le
+  navigateur, et pour le clavier sur un vrai appareil.
+- L'envoi direct n'a **jamais** été essayé sur un vrai clavier.
 - La taille d'écran est une constante (`SCREEN_SIZE`) : un autre clavier demande d'en faire un réglage.

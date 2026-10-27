@@ -1,0 +1,58 @@
+<div
+  id="envoyer"
+  class="grid gap-3 rounded-2xl border bg-surface p-3.5 shadow-[0_12px_40px_-12px_rgb(0_0_0/0.55)]"
+  [class]="keyboard.supported ? 'border-line-strong' : 'border-2 border-accent'"
+>
+  @if (!keyboard.supported) {
+    <div class="flex flex-wrap items-center gap-x-4 gap-y-1" role="alert">
+      <p class="m-0 text-base font-bold text-accent">Envoi impossible dans ce navigateur</p>
+      <p class="m-0 text-sm font-medium">{{ keyboard.unsupported }}</p>
+    </div>
+  } @else if (keyboard.confirming()) {
+    <div class="grid gap-2.5" role="alertdialog" aria-label="Confirmer l'envoi">
+      <p class="m-0 text-sm">
+        L'animation va être écrite dans la mémoire du clavier. <b>Garde le câble branché</b> et ne ferme pas la
+        page. Seul l'écran est modifié : jamais les touches, la disposition ni l'éclairage.
+      </p>
+      <p class="m-0 text-xs text-muted">
+        <b>Bêta :</b> la séquence vient d'un projet confirmé sur un modèle ISO, mais cette page n'a pas encore été
+        essayée sur un vrai clavier. L'ANSI n'est pas testé.
+      </p>
+      <div class="flex gap-2">
+        <ss-button (pressed)="keyboard.confirmSend()">Envoyer</ss-button>
+        <ss-button variant="ghost" (pressed)="keyboard.cancelConfirm()">Annuler</ss-button>
+      </div>
+    </div>
+  } @else if (keyboard.busy()) {
+    <div class="grid gap-2" role="status">
+      <span class="text-sm font-medium">{{ keyboard.status().message }} {{ percent() ? percent() + ' %' : '' }}</span>
+      <div
+        class="h-2 overflow-hidden rounded-full bg-line"
+        role="progressbar"
+        [attr.aria-valuenow]="percent()"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      >
+        <div class="h-full bg-fg" [style.width.%]="percent()"></div>
+      </div>
+      <div>
+        <ss-button variant="ghost" [small]="true" (pressed)="keyboard.cancelTransfer()">Annuler l'envoi</ss-button>
+      </div>
+    </div>
+  } @else {
+    <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2.5">
+      <p class="m-0 min-w-0 flex-1 basis-60 text-sm">{{ hint() }}</p>
+      <ss-button (pressed)="keyboard.requestSend()">Envoyer à mon clavier</ss-button>
+    </div>
+  }
+
+  @if (keyboard.status().message && !keyboard.busy()) {
+    <p
+      class="m-0 rounded-xl p-3 text-sm font-medium"
+      [class]="keyboard.status().state === 'error' ? 'bg-accent/10 text-accent' : 'bg-ok/10 text-ok'"
+      role="status"
+    >
+      {{ keyboard.status().message }}
+    </p>
+  }
+</div>
