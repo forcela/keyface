@@ -7,7 +7,6 @@ import { genzTheme } from '@core/render/themes/genz.theme';
 import { landscapeTheme } from '@core/render/themes/landscape.theme';
 import { lofiTheme } from '@core/render/themes/lofi.theme';
 import { minimalTheme } from '@core/render/themes/minimal.theme';
-import { auroraTheme } from '@core/render/themes/aurora.theme';
 import { bentoTheme } from '@core/render/themes/bento.theme';
 import { ThemeId } from '@core/render/themes/theme.model';
 import { EditorStore } from '@core/state/editor.store';
@@ -40,8 +39,6 @@ export class FrameRenderer {
         return genzTheme.draw(c, frame, options.genz);
       case 'lofi':
         return lofiTheme.draw(c, frame, options.lofi);
-      case 'aurora':
-        return auroraTheme.draw(c, frame, options.aurora);
       case 'bento':
         return bentoTheme.draw(c, frame, options.bento);
       case 'custom':

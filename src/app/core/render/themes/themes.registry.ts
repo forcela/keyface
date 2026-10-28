@@ -3,7 +3,6 @@ import { genzTheme } from './genz.theme';
 import { landscapeTheme } from './landscape.theme';
 import { lofiTheme } from './lofi.theme';
 import { minimalTheme } from './minimal.theme';
-import { auroraTheme } from './aurora.theme';
 import { bentoTheme } from './bento.theme';
 import { LoopDefaults, ThemeId } from './theme.model';
 
@@ -15,6 +14,6 @@ export interface ThemeSummary {
 }
 
 /** Display order of the style picker. */
-export const THEMES: readonly ThemeSummary[] = [minimalTheme, landscapeTheme, genzTheme, lofiTheme, auroraTheme, bentoTheme, customTheme];
+export const THEMES: readonly ThemeSummary[] = [minimalTheme, landscapeTheme, genzTheme, lofiTheme, bentoTheme, customTheme];
 
 export const themeById = (id: ThemeId): ThemeSummary => THEMES.find((theme) => theme.id === id) ?? minimalTheme;

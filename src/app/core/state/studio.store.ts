@@ -3,7 +3,6 @@ import { GENZ_DEFAULTS, GenzOptions } from '@core/render/themes/genz.theme';
 import { LANDSCAPE_DEFAULTS, LandscapeOptions } from '@core/render/themes/landscape.theme';
 import { LOFI_DEFAULTS, LofiOptions } from '@core/render/themes/lofi.theme';
 import { MINIMAL_DEFAULTS, MinimalOptions } from '@core/render/themes/minimal.theme';
-import { AURORA_DEFAULTS, AuroraOptions } from '@core/render/themes/aurora.theme';
 import { BENTO_DEFAULTS, BentoOptions } from '@core/render/themes/bento.theme';
 import { ThemeId } from '@core/render/themes/theme.model';
 import { themeById } from '@core/render/themes/themes.registry';
@@ -16,7 +15,6 @@ export interface ThemeOptions {
   landscape: LandscapeOptions;
   genz: GenzOptions;
   lofi: LofiOptions;
-  aurora: AuroraOptions;
   bento: BentoOptions;
 }
 
@@ -37,7 +35,6 @@ export class StudioStore {
     landscape: LANDSCAPE_DEFAULTS,
     genz: GENZ_DEFAULTS,
     lofi: LOFI_DEFAULTS,
-    aurora: AURORA_DEFAULTS,
     bento: BENTO_DEFAULTS,
   });
 

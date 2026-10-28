@@ -107,28 +107,13 @@
       </div>
     </kf-panel-section>
   }
-  @case ('aurora') {
-    <kf-panel-section title="Aurora">
-      <kf-segmented-control
-        label="Couleurs"
-        [options]="auroraPalettes"
-        [value]="aurora().palette"
-        (valueChange)="studio.patch('aurora', { palette: $event })"
-      />
-      <kf-text-field
-        label="Texte si l'heure est masquée"
-        [maxLength]="12"
-        [value]="aurora().label"
-        (valueChange)="studio.patch('aurora', { label: $event })"
-      />
-    </kf-panel-section>
-  }
   @case ('bento') {
     <kf-panel-section title="Bento">
-      <kf-color-field
-        label="Couleur de la tuile de l'heure"
-        [value]="bento().color"
-        (valueChange)="studio.patch('bento', { color: $event })"
+      <kf-segmented-control
+        label="Couleurs"
+        [options]="bentoPalettes"
+        [value]="bento().palette"
+        (valueChange)="studio.patch('bento', { palette: $event })"
       />
       <kf-text-field
         label="Texte si l'heure est masquée"
