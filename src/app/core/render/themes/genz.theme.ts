@@ -12,9 +12,19 @@ export interface GenzOptions {
   bubble: string;
   /** Replaces the mascot when set. */
   image: DecodedImage | null;
+  /** What the typing cat taps: random keys, or the letters of `typed`. */
+  keys: 'random' | 'text';
+  typed: string;
 }
 
-export const GENZ_DEFAULTS: GenzOptions = { mascot: 'typing', palette: 'ink', bubble: 'chill', image: null };
+export const GENZ_DEFAULTS: GenzOptions = {
+  mascot: 'typing',
+  palette: 'ink',
+  bubble: 'chill',
+  image: null,
+  keys: 'random',
+  typed: 'salut',
+};
 
 function drawBackdrop(c: Ctx, t: number, p: GenzColors): void {
   c.fillStyle = p.background;
@@ -75,7 +85,7 @@ export const genzTheme: ThemeDefinition<GenzOptions> = {
       c.beginPath();
       c.arc(64, 68, 38.5, 0, TAU);
       c.stroke();
-      MASCOTS[o.mascot](c, frame.t, p.accent);
+      MASCOTS[o.mascot](c, frame.t, p.accent, o.keys === 'text' ? o.typed : undefined);
     }
     if (o.bubble) drawSpeechBubble(c, o.bubble, p);
     if (frame.showClock) drawTimeSticker(c, frame.clock.time, p);

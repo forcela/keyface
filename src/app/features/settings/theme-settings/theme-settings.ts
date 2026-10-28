@@ -26,6 +26,10 @@ export class ThemeSettings {
     { value: 'black', label: 'Noir' },
     { value: 'halo', label: 'Halo' },
   ] as const;
+  protected readonly keyModes = [
+    { value: 'random', label: 'Aléatoire' },
+    { value: 'text', label: 'Mon texte' },
+  ] as const;
   protected readonly ambiances = segmentsOf<Ambiance>(AMBIANCE_LABELS);
   protected readonly mascots = segmentsOf<MascotKind>(MASCOT_LABELS);
   protected readonly palettes = segmentsOf<GenzPalette>(GENZ_PALETTE_LABELS);

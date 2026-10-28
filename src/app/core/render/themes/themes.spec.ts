@@ -67,6 +67,25 @@ describe('ready-made styles', () => {
     expectSaneDrawing((c, t) => genzTheme.draw(c, frameAtT(t), { ...GENZ_DEFAULTS, bubble: '' }));
   });
 
+  it('draws the typing cat on random keys, on a text, and on an empty or spaced text', () => {
+    const typing = { ...GENZ_DEFAULTS, mascot: 'typing' as const };
+    expectSaneDrawing((c, t) => genzTheme.draw(c, frameAtT(t), typing));
+    for (const typed of ['salut basil', 'A', '   ', '', 'ÉÀ12 !?']) {
+      expectSaneDrawing((c, t) => genzTheme.draw(c, frameAtT(t), { ...typing, keys: 'text', typed }));
+    }
+  });
+
+  it('makes the typing cat tap other keys for another text', () => {
+    const typing = { ...GENZ_DEFAULTS, mascot: 'typing' as const, keys: 'text' as const };
+    const draw = (typed: string) => {
+      const { ctx, calls } = recordContext();
+      genzTheme.draw(ctx, frameAtT(0.02), { ...typing, typed });
+      return roundedCalls(calls);
+    };
+    expect(draw('abc')).not.toBe(draw('xyz'));
+    expect(draw('abc')).toBe(draw('abc'));
+  });
+
   it('draws lo-fi, including an empty title', () => {
     expectSaneDrawing((c, t) => lofiTheme.draw(c, frameAtT(t), LOFI_DEFAULTS));
     expectSaneDrawing((c, t) => lofiTheme.draw(c, frameAtT(t), { ...LOFI_DEFAULTS, title: '' }));
@@ -111,6 +130,12 @@ describe('seamless loops', () => {
 
   it.each(AMBIANCES_LIST)('the %s landscape ends where it starts', (ambiance) => {
     expect(loops((c, t) => drawScenery(c, t, ambiance))).toBe(true);
+  });
+
+  it('the typing cat ends where it starts, random or spelling a text', () => {
+    const typing = { ...GENZ_DEFAULTS, mascot: 'typing' as const };
+    expect(loops((c, t) => genzTheme.draw(c, frameAtT(t), typing))).toBe(true);
+    expect(loops((c, t) => genzTheme.draw(c, frameAtT(t), { ...typing, keys: 'text', typed: 'salut basil' }))).toBe(true);
   });
 
   it.each(Object.keys(BENTO_COLORS) as BentoPalette[])('the %s bento ends where it starts', (palette) => {

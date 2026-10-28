@@ -1,5 +1,6 @@
-import { Ctx, TAU, drawText, roundRect } from '../canvas.utils';
+import { Ctx, TAU, drawText } from '../canvas.utils';
 import { closedCatEyes, drawSprite } from './sprite';
+import { drawTypingCat } from './typing-cat';
 import {
   CAT,
   CAT_COLORS,
@@ -17,7 +18,7 @@ export type MascotKind = 'shades' | 'typing' | 'sleeping' | 'ghost' | 'frog';
  * Each mascot draws itself around the point (64, 66) in an ~80 px box.
  * Callers translate/scale the context to place it elsewhere.
  */
-type MascotDraw = (c: Ctx, t: number, accent: string) => void;
+type MascotDraw = (c: Ctx, t: number, accent: string, typed?: string) => void;
 
 const PIXEL = 4;
 
@@ -52,34 +53,6 @@ function groundShadow(c: Ctx, y: number, radius: number): void {
   c.fill();
 }
 
-function typingKeyboard(c: Ctx, t: number, accent: string, beat: number): void {
-  const kx = 22;
-  const ky = 80;
-  c.fillStyle = '#000';
-  roundRect(c, kx - 1, ky - 1, 86, 20, 4);
-  c.fill();
-  c.fillStyle = '#3b3f48';
-  roundRect(c, kx, ky, 84, 18, 3);
-  c.fill();
-  const alt = Math.floor(t * 4) % 2;
-  const hitLeft = alt ? 2 : 11;
-  const hitRight = alt ? 15 : 6;
-  for (let i = 0; i < 18; i++) {
-    const pressed = (beat === 0 && i === hitLeft) || (beat === 1 && i === hitRight);
-    c.fillStyle = pressed ? accent : '#80858f';
-    c.fillRect(kx + 4 + (i % 9) * 9, ky + 3 + Math.floor(i / 9) * 7, 7, 5);
-  }
-  const paw = (px: number, down: boolean) => {
-    const py = ky - 5 + (down ? 4 : 0);
-    c.fillStyle = '#000';
-    c.fillRect(px - 1, py - 1, 12, 8);
-    c.fillStyle = CAT_COLORS['w'];
-    c.fillRect(px, py, 10, 6);
-  };
-  paw(40, beat === 0);
-  paw(78, beat === 1);
-}
-
 export const MASCOTS: Record<MascotKind, MascotDraw> = {
   shades(c, t) {
     const x = 34;
@@ -88,11 +61,7 @@ export const MASCOTS: Record<MascotKind, MascotDraw> = {
     drawSprite(c, CAT, CAT_COLORS, x, y, PIXEL);
     droppingShades(c, t, x, y);
   },
-  typing(c, t, accent) {
-    const beat = Math.floor(t * 8) % 2;
-    drawSprite(c, CAT, CAT_COLORS, 36, 30 + beat, PIXEL);
-    typingKeyboard(c, t, accent, beat);
-  },
+  typing: drawTypingCat,
   sleeping(c, t, accent) {
     const x = 34;
     const y = 32 + Math.round(Math.sin(TAU * t));

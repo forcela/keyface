@@ -55,6 +55,22 @@
         [value]="genz().palette"
         (valueChange)="studio.patch('genz', { palette: $event })"
       />
+      @if (genz().mascot === 'typing' && !genz().image) {
+        <kf-segmented-control
+          label="Touches du chat"
+          [options]="keyModes"
+          [value]="genz().keys"
+          (valueChange)="studio.patch('genz', { keys: $event })"
+        />
+        @if (genz().keys === 'text') {
+          <kf-text-field
+            label="Lettres tapées (12 max, espace = pause)"
+            [maxLength]="12"
+            [value]="genz().typed"
+            (valueChange)="studio.patch('genz', { typed: $event })"
+          />
+        }
+      }
       <kf-text-field
         label="Bulle"
         [maxLength]="10"
