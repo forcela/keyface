@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { AMBIANCE_LABELS, Ambiance } from '@core/render/scenery';
 import { MASCOT_LABELS, MascotKind } from '@core/render/sprites/mascots';
+import { AURORA_PALETTE_LABELS, AuroraPalette } from '@core/render/themes/aurora.constants';
 import { GENZ_PALETTE_LABELS, GenzPalette } from '@core/render/themes/genz.constants';
 import { StudioStore } from '@core/state/studio.store';
 import { decodeImage } from '@core/media/decode-image';
@@ -33,7 +34,9 @@ export class ThemeSettings {
   protected readonly landscape = computed(() => this.studio.options().landscape);
   protected readonly genz = computed(() => this.studio.options().genz);
   protected readonly lofi = computed(() => this.studio.options().lofi);
-  protected readonly synthwave = computed(() => this.studio.options().synthwave);
+  protected readonly auroraPalettes = segmentsOf<AuroraPalette>(AURORA_PALETTE_LABELS);
+  protected readonly aurora = computed(() => this.studio.options().aurora);
+  protected readonly bento = computed(() => this.studio.options().bento);
 
   protected readonly imageInfo = computed(() => {
     const image = this.genz().image;

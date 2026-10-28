@@ -3,7 +3,8 @@ import { GENZ_DEFAULTS, GenzOptions } from '@core/render/themes/genz.theme';
 import { LANDSCAPE_DEFAULTS, LandscapeOptions } from '@core/render/themes/landscape.theme';
 import { LOFI_DEFAULTS, LofiOptions } from '@core/render/themes/lofi.theme';
 import { MINIMAL_DEFAULTS, MinimalOptions } from '@core/render/themes/minimal.theme';
-import { SYNTHWAVE_DEFAULTS, SynthwaveOptions } from '@core/render/themes/synthwave.theme';
+import { AURORA_DEFAULTS, AuroraOptions } from '@core/render/themes/aurora.theme';
+import { BENTO_DEFAULTS, BentoOptions } from '@core/render/themes/bento.theme';
 import { ThemeId } from '@core/render/themes/theme.model';
 import { themeById } from '@core/render/themes/themes.registry';
 
@@ -15,7 +16,8 @@ export interface ThemeOptions {
   landscape: LandscapeOptions;
   genz: GenzOptions;
   lofi: LofiOptions;
-  synthwave: SynthwaveOptions;
+  aurora: AuroraOptions;
+  bento: BentoOptions;
 }
 
 /** Global studio state: which style is shown, its settings and the animation loop. */
@@ -35,7 +37,8 @@ export class StudioStore {
     landscape: LANDSCAPE_DEFAULTS,
     genz: GENZ_DEFAULTS,
     lofi: LOFI_DEFAULTS,
-    synthwave: SYNTHWAVE_DEFAULTS,
+    aurora: AURORA_DEFAULTS,
+    bento: BENTO_DEFAULTS,
   });
 
   readonly loopSeconds = computed(() => (this.frames() * this.delay()) / 1000);

@@ -1,4 +1,5 @@
 import { FakeOffscreenCanvas, numbersIn, recordContext, roundedCalls } from '../../../../testing/recording-context';
+import { Ctx } from '../canvas.utils';
 import { drawEffect, EffectKind, EFFECT_LABELS } from '../effects';
 import { readClock } from '../clock';
 import { FrameContext } from '../frame.model';
@@ -10,7 +11,9 @@ import { GENZ_PALETTES, GenzPalette } from './genz.constants';
 import { LANDSCAPE_DEFAULTS, landscapeTheme } from './landscape.theme';
 import { LOFI_DEFAULTS, lofiTheme } from './lofi.theme';
 import { MINIMAL_DEFAULTS, minimalTheme } from './minimal.theme';
-import { SYNTHWAVE_DEFAULTS, synthwaveTheme } from './synthwave.theme';
+import { AURORA_DEFAULTS, auroraTheme } from './aurora.theme';
+import { AURORA_COLORS, AuroraPalette } from './aurora.constants';
+import { BENTO_DEFAULTS, bentoTheme } from './bento.theme';
 import { genzTheme } from './genz.theme';
 import { customTheme } from './custom.theme';
 
@@ -24,6 +27,14 @@ const frameAtT = (t: number, overrides: Partial<FrameContext> = {}): FrameContex
 });
 
 const SAMPLE_TIMES = [0, 0.13, 0.5, 0.87, 0.99];
+
+type Drawer = (c: Ctx, frame: FrameContext, label?: string) => void;
+
+/** The two styles that only take a colour or palette and a label. */
+const MODERN_STYLES: Record<'aurora' | 'bento', Drawer> = {
+  aurora: (c, frame, label = AURORA_DEFAULTS.label) => auroraTheme.draw(c, frame, { ...AURORA_DEFAULTS, label }),
+  bento: (c, frame, label = BENTO_DEFAULTS.label) => bentoTheme.draw(c, frame, { ...BENTO_DEFAULTS, label }),
+};
 
 /** Draws with a recording context and checks nothing throws and every number is finite. */
 function expectSaneDrawing(draw: (ctx: ReturnType<typeof recordContext>['ctx'], t: number) => void): void {
@@ -71,12 +82,24 @@ describe('ready-made styles', () => {
     expectSaneDrawing((c, t) => lofiTheme.draw(c, frameAtT(t), { ...LOFI_DEFAULTS, title: '' }));
   });
 
-  it('draws synthwave, with and without clock and battery', () => {
-    expectSaneDrawing((c, t) => synthwaveTheme.draw(c, frameAtT(t), SYNTHWAVE_DEFAULTS));
-    expectSaneDrawing((c, t) =>
-      synthwaveTheme.draw(c, frameAtT(t, { showClock: false, showBattery: false }), SYNTHWAVE_DEFAULTS),
-    );
+  it.each(Object.keys(AURORA_COLORS) as AuroraPalette[])('draws aurora in the %s palette', (palette) => {
+    expectSaneDrawing((c, t) => auroraTheme.draw(c, frameAtT(t), { ...AURORA_DEFAULTS, palette }));
   });
+
+  it.each(Object.keys(MODERN_STYLES) as (keyof typeof MODERN_STYLES)[])(
+    'draws %s in every combination of clock, battery and level',
+    (name) => {
+      const draw = MODERN_STYLES[name];
+      for (const showClock of [true, false]) {
+        for (const showBattery of [true, false]) {
+          for (const battery of [0, 10, 78, 100]) {
+            expectSaneDrawing((c, t) => draw(c, frameAtT(t, { showClock, showBattery, battery })));
+          }
+        }
+      }
+      expectSaneDrawing((c, t) => draw(c, frameAtT(t, { showClock: false }), ''));
+    },
+  );
 
   it.each(Object.keys(TEMPLATES) as TemplateId[])('draws the custom style from the %s template', (id) => {
     expectSaneDrawing((c, t) => customTheme.draw(c, frameAtT(t), { layers: TEMPLATES[id](), images: new Map() }));
@@ -102,6 +125,10 @@ describe('seamless loops', () => {
 
   it.each(AMBIANCES_LIST)('the %s landscape ends where it starts', (ambiance) => {
     expect(loops((c, t) => drawScenery(c, t, ambiance))).toBe(true);
+  });
+
+  it.each(Object.keys(MODERN_STYLES) as (keyof typeof MODERN_STYLES)[])('the %s style ends where it starts', (name) => {
+    expect(loops((c, t) => MODERN_STYLES[name](c, frameAtT(t)))).toBe(true);
   });
 
   it.each(Object.keys(EFFECT_LABELS) as EffectKind[])('the %s effect ends where it starts', (kind) => {
