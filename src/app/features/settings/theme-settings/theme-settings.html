@@ -107,4 +107,19 @@
       </div>
     </kf-panel-section>
   }
+  @case ('synthwave') {
+    <kf-panel-section title="Synthwave">
+      <kf-color-field
+        label="Couleur néon"
+        [value]="synthwave().color"
+        (valueChange)="studio.patch('synthwave', { color: $event })"
+      />
+      <kf-text-field
+        label="Texte si l'heure est masquée"
+        [maxLength]="12"
+        [value]="synthwave().label"
+        (valueChange)="studio.patch('synthwave', { label: $event })"
+      />
+    </kf-panel-section>
+  }
 }

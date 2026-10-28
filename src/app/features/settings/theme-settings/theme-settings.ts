@@ -33,6 +33,7 @@ export class ThemeSettings {
   protected readonly landscape = computed(() => this.studio.options().landscape);
   protected readonly genz = computed(() => this.studio.options().genz);
   protected readonly lofi = computed(() => this.studio.options().lofi);
+  protected readonly synthwave = computed(() => this.studio.options().synthwave);
 
   protected readonly imageInfo = computed(() => {
     const image = this.genz().image;

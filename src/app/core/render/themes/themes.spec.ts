@@ -10,6 +10,7 @@ import { GENZ_PALETTES, GenzPalette } from './genz.constants';
 import { LANDSCAPE_DEFAULTS, landscapeTheme } from './landscape.theme';
 import { LOFI_DEFAULTS, lofiTheme } from './lofi.theme';
 import { MINIMAL_DEFAULTS, minimalTheme } from './minimal.theme';
+import { SYNTHWAVE_DEFAULTS, synthwaveTheme } from './synthwave.theme';
 import { genzTheme } from './genz.theme';
 import { customTheme } from './custom.theme';
 
@@ -68,6 +69,13 @@ describe('ready-made styles', () => {
   it('draws lo-fi, including an empty title', () => {
     expectSaneDrawing((c, t) => lofiTheme.draw(c, frameAtT(t), LOFI_DEFAULTS));
     expectSaneDrawing((c, t) => lofiTheme.draw(c, frameAtT(t), { ...LOFI_DEFAULTS, title: '' }));
+  });
+
+  it('draws synthwave, with and without clock and battery', () => {
+    expectSaneDrawing((c, t) => synthwaveTheme.draw(c, frameAtT(t), SYNTHWAVE_DEFAULTS));
+    expectSaneDrawing((c, t) =>
+      synthwaveTheme.draw(c, frameAtT(t, { showClock: false, showBattery: false }), SYNTHWAVE_DEFAULTS),
+    );
   });
 
   it.each(Object.keys(TEMPLATES) as TemplateId[])('draws the custom style from the %s template', (id) => {

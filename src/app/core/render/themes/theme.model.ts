@@ -1,7 +1,7 @@
 import { Ctx } from '../canvas.utils';
 import { FrameContext } from '../frame.model';
 
-export type ThemeId = 'minimal' | 'landscape' | 'genz' | 'lofi' | 'custom';
+export type ThemeId = 'minimal' | 'landscape' | 'genz' | 'lofi' | 'synthwave' | 'custom';
 
 export interface LoopDefaults {
   frames: number;
